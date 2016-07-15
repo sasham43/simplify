@@ -6,18 +6,25 @@
 
     <!-- Libraries -->
     <link rel="stylesheet" href="assets/styles/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/styles/font-awesome.min.css">
     <script src="vendor/angular/angular.min.js"></script>
     <script src="vendor/angular-route/angular-route.min.js"></script>
 
     <!-- Custom -->
     <link rel="stylesheet" href="assets/styles/style.css">
     <script src="assets/scripts/client.min.js"></script>
-
+    
+    <base href="/">
   </head>
   <body>
-    <div class="splash" ng-controller="SplashController as sc">
-      <h1>simplify</h1>
-    </div>
+    <div class="container">
+      <div class="jumbotron">
+        <h1 class="text-center">simplify</h1>
+      </div>
+      <div ng-view>
 
+      </div>
+
+    </div>
   </body>
 </html>

@@ -1,3 +1,26 @@
 body{
+  background-color: #333;
+  color: chartreuse;
+}
+
+a, a:hover{
+  color: inherit;
+}
+
+.jumbotron{
   background-color: chartreuse;
+  color: #333;
+}
+
+.splash{
+  color: chartreuse;
+  /*font-size: 30px;*/
+}
+
+.login{
+
+}
+
+.about{
+  
 }
