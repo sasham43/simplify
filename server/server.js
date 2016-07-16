@@ -3,6 +3,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var passport = require('passport');
+var SpotifyStrategy = require('passport-spotify').Strategy;
 var session = require('express-session');
 var pg = require('pg');
 
@@ -20,7 +21,16 @@ var spotify = require('./routes/spotify');
 app.use(express.static('server/public'));
 app.use(bodyParser.json());
 app.use(cookieParser());
-
+//express session
+app.use(session({
+  secret: 'teal walls',
+  resave: true,
+  saveUninitialized: false,
+  cookie: {maxAge: 3600000, secure: false}
+}));
+//initializing passport//
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 

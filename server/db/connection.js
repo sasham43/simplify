@@ -9,10 +9,9 @@ function initialize(){
       process.exit(1); // this is a built-in node thing that lets us kill this node process (i.e. our web server) if there is an error
     } else {
       // create inital schema
-      var query = client.query('CREATE TABLE IF NOT EXISTS people ('+
+      var query = client.query('CREATE TABLE IF NOT EXISTS users ('+
       'id serial PRIMARY KEY,' +
-      'name varchar(80) NOT NULL,' +
-      'address text)');
+      'spotifyID varchar(80) NOT NULL)');
 
       query.on('end', function(){
         console.log('Successfully created schema');
