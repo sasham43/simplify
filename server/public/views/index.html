@@ -21,12 +21,10 @@
       <div class="jumbotron">
         <h1 class="text-center">simplify</h1>
       </div>
-      <div class="login text-center" ng-controller="LoginController as lc">
-        <a href="/authorize"><h2>login</h2></a>
+      <div ng-view>
 
-        <button ng-click="lc.getInfo()" class="btn btn-default">get info</button>
-        <!-- <button class="btn btn-default" ng-click="lc.spotifyAuth()">Authorize</button> -->
       </div>
+
 
     </div>
   </body>

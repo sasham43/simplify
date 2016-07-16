@@ -40,10 +40,24 @@ router.get('/', passport.authenticate('spotify', {scope: ['user-read-email', 'us
 
 router.get('/callback', passport.authenticate('spotify', {failureRedirect: '/fail'}), function(req, res){
   // success
-  console.log('successfully authenticated.');
-  res.redirect('/');
-})
+  console.log('successfully authenticated.', req.user);
+  res.redirect('/home');
+});
 
+router.get('/info', ensureAuthenticated, function(req, res){
+  res.send(req.user);
+});
+
+
+// Simple route middleware to ensure user is authenticated.
+//   Use this route middleware on any resource that needs to be protected.  If
+//   the request is authenticated (typically via a persistent login session),
+//   the request will proceed. Otherwise, the user will be redirected to the
+//   login page.
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
+}
 
 
 // /**
