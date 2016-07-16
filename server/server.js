@@ -8,7 +8,7 @@ var port = process.env.PORT || 3000;
 
 ////////////import modules//////////
 var index = require('./routes/index');
-var authorize = require('./routes/authorize');
+var authorize = require('./routes/authorize').router;
 
 
 //////////// config /////////////

@@ -24,10 +24,7 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 
-
-
 router.get('/', function(req, res){
-  console.log('hit /auth/login');
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
@@ -86,10 +83,16 @@ router.get('/callback', function(req, res){
           console.log('spotify get body:', body);
         });
 
-        res.redirect('/#' + querystring.stringify({
-          access_token: access_token,
-          refresh_token: refresh_token
-        }));
+        // res.redirect('/#' + querystring.stringify({
+        //   access_token: access_token,
+        //   refresh_token: refresh_token
+        // }));
+
+        //res.sendStatus(200);
+        res.redirect('/');
+
+        module.exports.access_token = access_token;
+        module.exports.refresh_token = refresh_token;
 
         // res.send({
         //   access_token: access_token,
@@ -101,11 +104,8 @@ router.get('/callback', function(req, res){
         }))
       }
     });
-
-
   }
-
 });
 
 
-module.exports = router;
+module.exports.router = router;
