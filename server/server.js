@@ -9,6 +9,7 @@ var port = process.env.PORT || 3000;
 ////////////import modules//////////
 var index = require('./routes/index');
 var authorize = require('./routes/authorize').router;
+var spotify = require('./routes/spotify');
 
 
 //////////// config /////////////
@@ -21,6 +22,7 @@ app.use(cookieParser());
 
 ///////////routes/////////////
 app.use('/authorize', authorize);
+app.use('/spotify', spotify);
 app.use('/', index);
 
 

@@ -29,11 +29,17 @@ angular.module('simplifyApp').controller('SplashController',['$http', function($
 angular.module('simplifyApp').controller('LoginController',['$http', function($http){
   var lc = this;
 
-  lc.spotifyAuth = function(){
-    $http.get('/authorize').then(function(response){
-      console.log('spotify auth response:', response);
+  // lc.spotifyAuth = function(){
+  //   $http.get('/authorize').then(function(response){
+  //     console.log('spotify auth response:', response);
+  //   });
+  // }
+
+  lc.getInfo = function(){
+    $http.get('/spotify/info').then(function(response){
+      console.log('spotify info:', response.data);
     });
-  }
+  };
 
   console.log('Login controller loaded.');
 }]);
