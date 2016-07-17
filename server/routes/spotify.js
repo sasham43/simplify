@@ -21,6 +21,7 @@ router.get('/info', function(req, res){
 });
 
 router.get('/albums', function(req, res){
+  console.log('getting albums...');
   var albums = [];
   var options = {
     url: 'https://api.spotify.com/v1/me/albums?limit=50',
@@ -38,8 +39,9 @@ router.get('/albums', function(req, res){
         options.url = body.next;
         request.get(options, getAlbums);
       } else {
+        console.log('got albums.');
         res.send({albums:albums});
-      }  
+      }
     }
   };
 
