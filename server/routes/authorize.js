@@ -22,6 +22,8 @@ passport.use(new SpotifyStrategy({
       // represent the logged-in user. In a typical application, you would want
       // to associate the spotify account with a user record in your database,
       // and return that user instead.
+      module.exports.access_token = accessToken;
+      module.exports.refresh_token = refreshToken;
       return done(null, profile);
     });
 }))
@@ -34,7 +36,7 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-router.get('/', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'] }), function(req, res){
+router.get('/', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private', 'user-library-read'] }), function(req, res){
   // does not get called, gets redirected
 });
 

@@ -1,3 +1,8 @@
 <div class="home">
-  {{hc.user}}
+  <div class="userInfo">
+    <p>
+      Name: {{hc.user.displayName}}
+    </p>
+    <img ng-src="{{hc.user.photos[0]}}" />
+  </div>
 </div>

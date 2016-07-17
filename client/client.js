@@ -34,14 +34,17 @@ angular.module('simplifyApp').controller('SplashController',['$http', function($
   console.log('Splash controller loaded.');
 }]);
 
-angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', function(UserTrackFactory){
+angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', 'AlbumFactory', function(UserTrackFactory, AlbumFactory){
   var hc = this;
 
   hc.user = {};
 
   UserTrackFactory.getUserInfo().then(function(response){
     hc.user = response.data;
-  })
+    console.log('User info:', hc.user);
+  });
+
+  AlbumFactory.getAlbums();
 
   console.log('home controller loaded.');
 }]);
@@ -57,6 +60,21 @@ angular.module('simplifyApp').controller('AboutController',['$http', function($h
 
 
 // factories
+
+angular.module('simplifyApp').factory('AlbumFactory', ['$http', function($http){
+  var albums = [];
+
+  var getAlbums = function(){
+    $http.get('/spotify/albums').then(function(response){
+      console.log('Album response:', response.data);
+    });
+  };
+
+  return {
+    albums: albums,
+    getAlbums: getAlbums
+  }
+}]);
 
 angular.module('simplifyApp').factory('UserTrackFactory', ['$http', function($http){
   var user = {};

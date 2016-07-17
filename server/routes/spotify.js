@@ -20,4 +20,16 @@ router.get('/info', function(req, res){
   });
 });
 
+router.get('/albums', function(req, res){
+  var options = {
+    url: 'https://api.spotify.com/v1/me/albums',
+    headers: {'Authorization': 'Bearer ' + authorize.access_token},
+    json: true
+  };
+
+  request.get(options, function(err, response, body){
+    res.send(body);
+  });
+});
+
 module.exports = router;

@@ -7,6 +7,18 @@ a, a:hover{
   color: inherit;
 }
 
+.btn-default{
+  color: chartreuse;
+  background-color: #333;
+  border-color: chartreuse;
+}
+
+.btn-default:hover, .btn-default:active, .btn-default:focus{
+  color: #333;
+  background-color: chartreuse;
+  border-color: #333;
+}
+
 .jumbotron{
   background-color: chartreuse;
   color: #333;
@@ -14,6 +26,11 @@ a, a:hover{
 
 .splash{
   color: chartreuse;
+  font-size: 25px;
+}
+
+.startBtn{
+  margin-top: 10vh;
 }
 
 .go{
