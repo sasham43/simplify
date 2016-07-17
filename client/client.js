@@ -53,6 +53,16 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
     hc.spinning = false;
   });
 
+  // hover states
+  hc.showAlbumOverlay = function(album){
+    console.log('show', this, this.show);
+    album.show = true;
+  };
+  hc.hideAlbumOverlay = function(album){
+    album.show = false;
+    console.log('hide', this, this.show);
+  }
+
   console.log('home controller loaded.');
 }]);
 
