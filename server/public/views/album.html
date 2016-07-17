@@ -1,0 +1,10 @@
+<div class="examine">
+  <div class="trackContainer center-block">
+    <img class="" src="{{ec.currentAlbum.images[0].url}}" />
+    <div class="tracks">
+      <div class="track" ng-style="ec.trackStyles" ng-repeat="track in ec.currentAlbum.tracks.items">
+        {{$index+1}} {{track.name}}
+      </div>
+    </div>
+  </div>
+</div>

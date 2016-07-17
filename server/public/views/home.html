@@ -11,10 +11,9 @@
       <div class="overlayContainer center-block" ng-mouseover="hc.showAlbumOverlay(album)" ng-mouseleave="hc.hideAlbumOverlay(album)">
         <img class="cover " ng-src="{{album.album.images[1].url}}" />
         <div class="overlay" ng-show="album.show">
-          <button class="btn btn-look"><i class="fa fa-eye fa-3x fa-fw"></i><span class="sr-only">look</span></button>
+          <button ng-click="hc.examineAlbum(album)" class="btn btn-look center-block">look</button>
         </div>
       </div>
-
     </div>
   </div>
 </div>

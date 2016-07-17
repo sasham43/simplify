@@ -23,6 +23,11 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
       controller: 'HomeController',
       controllerAs: 'hc'
     })
+    .when('/album', {
+      templateUrl: '/views/album.html',
+      controller: 'ExamineController',
+      controllerAs: 'ec'
+    })
     // .otherwise({
     //   redirectTo: '/login'
     // });
@@ -36,9 +41,9 @@ angular.module('simplifyApp').controller('SplashController',['$http', function($
 
 angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', 'AlbumFactory', function(UserTrackFactory, AlbumFactory){
   var hc = this;
+  console.log('albums here?', hc.albums);
 
   hc.user = {};
-  //hc.albums = AlbumFactory.albums;
 
   UserTrackFactory.getUserInfo().then(function(response){
     hc.user = response.data;
@@ -47,46 +52,71 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
 
   // start spin
   hc.spinning = true;
-  AlbumFactory.getAlbums().then(function(response){
-    console.log('Album response:', response.data);
-    hc.albums = response.data.albums;
-    hc.spinning = false;
-  });
+
+  if(!hc.albums){
+    AlbumFactory.getAlbums().then(function(response){
+      console.log('Album response:', response.data);
+      hc.albums = response.data.albums;
+      hc.spinning = false;
+    });
+  }
+
 
   // hover states
   hc.showAlbumOverlay = function(album){
-    console.log('show', this, this.show);
     album.show = true;
   };
   hc.hideAlbumOverlay = function(album){
     album.show = false;
-    console.log('hide', this, this.show);
-  }
+  };
+
+  // examine album
+  hc.examineAlbum = function(album){
+    AlbumFactory.examineAlbum(album);
+  };
 
   console.log('home controller loaded.');
 }]);
 
-angular.module('simplifyApp').controller('LoginController',['$http', function($http){
-  var lc = this;
-  console.log('Login controller loaded.');
-}]);
+angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', function(AlbumFactory){
+  var ec = this;
 
-angular.module('simplifyApp').controller('AboutController',['$http', function($http){
-  console.log('About controller loaded.');
+  ec.currentAlbum = AlbumFactory.currentAlbum.album.album;
+
+  ec.trackStyles = {
+    height: (600 / ec.currentAlbum.tracks.items.length) + 'px'
+  };
+
+  // hover states
+  ec.showAlbumOverlay = function(){
+    ec.showOverlay = true;
+  };
+  ec.hideAlbumOverlay = function(){
+    ec.showOverlay = false;
+  };
+
+  console.log('examine controller loaded.');
 }]);
 
 
 // factories
 
-angular.module('simplifyApp').factory('AlbumFactory', ['$http', function($http){
+angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', function($http, $location){
   var albums = [];
+  var currentAlbum = {album:{}};
 
   var getAlbums = function(){
     return $http.get('/spotify/albums');
   };
 
+  var examineAlbum = function(album){
+    $location.url('/album');
+    currentAlbum.album = album;
+  };
+
   return {
-    albums: albums,
+    currentAlbum: currentAlbum,
+    examineAlbum: examineAlbum,
     getAlbums: getAlbums
   }
 }]);

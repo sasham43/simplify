@@ -59,10 +59,39 @@ a, a:hover{
   height: 300px;
   top: 0;
   position: absolute;
-  left: 85px;
   transition: 0.1s all ease-in;
 }
 
 .overlayContainer{
   width: 300px;
+}
+
+.btn-look{
+  color: #333;
+  margin-top: 118px;
+  border-color: #333;
+  background-color: rgba(250, 250, 250, 0.6);
+}
+
+.btn-look:active{
+  outline-color: chartreuse;
+}
+
+.tracks{
+  position: absolute;
+  top:0;
+  left:0;
+  width:640px;
+  height:640px;
+
+  padding: 15px;
+  font-size: 20px;
+
+  background-color: rgba(250, 250, 250, 0.6);
+  color: #333;
+}
+
+.trackContainer{
+  position:relative;
+  width:640px;
 }
