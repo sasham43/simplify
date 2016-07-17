@@ -29,6 +29,7 @@ router.get('/albums', function(req, res){
     json: true
   };
 
+  // recursively get all of a users' saved albums
   var getAlbums = function(err, response, body){
     if(body.items){
       body.items.map(function(album){

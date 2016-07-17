@@ -48,6 +48,7 @@ a, a:hover{
 
 .album{
   /*width: 350px;*/
+  height: 305px;
   padding: 25px 0;
 }
 .album img{
