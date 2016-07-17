@@ -38,13 +38,20 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   var hc = this;
 
   hc.user = {};
+  //hc.albums = AlbumFactory.albums;
 
   UserTrackFactory.getUserInfo().then(function(response){
     hc.user = response.data;
     console.log('User info:', hc.user);
   });
 
-  AlbumFactory.getAlbums();
+  // start spin
+  hc.spinning = true;
+  AlbumFactory.getAlbums().then(function(response){
+    console.log('Album response:', response.data);
+    hc.albums = response.data.albums;
+    hc.spinning = false;
+  });
 
   console.log('home controller loaded.');
 }]);
@@ -65,9 +72,7 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', function($http){
   var albums = [];
 
   var getAlbums = function(){
-    $http.get('/spotify/albums').then(function(response){
-      console.log('Album response:', response.data);
-    });
+    return $http.get('/spotify/albums');
   };
 
   return {

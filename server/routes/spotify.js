@@ -21,15 +21,31 @@ router.get('/info', function(req, res){
 });
 
 router.get('/albums', function(req, res){
+  var albums = [];
   var options = {
-    url: 'https://api.spotify.com/v1/me/albums',
+    url: 'https://api.spotify.com/v1/me/albums?limit=50',
     headers: {'Authorization': 'Bearer ' + authorize.access_token},
     json: true
   };
 
-  request.get(options, function(err, response, body){
-    res.send(body);
-  });
+  var getAlbums = function(err, response, body){
+    if(body.items){
+      body.items.map(function(album){
+        albums.push(album);
+      });
+
+      if(body.next){
+        options.url = body.next;
+        request.get(options, getAlbums);
+      } else {
+        res.send({albums:albums});
+      }  
+    }
+  };
+
+  request.get(options, getAlbums);
 });
+
+
 
 module.exports = router;

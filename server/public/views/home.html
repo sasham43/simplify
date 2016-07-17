@@ -1,8 +1,14 @@
 <div class="home">
-  <div class="userInfo">
-    <p>
-      Name: {{hc.user.displayName}}
-    </p>
-    <img ng-src="{{hc.user.photos[0]}}" />
+  <h2 class="text-center">albums</h2>
+
+  <div class="spinner" ng-show="hc.spinning">
+    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+  </div>
+  
+  <div class="albums">
+    <div class="album" ng-repeat="album in hc.albums">
+      <img ng-src="{{album.album.images[2].url}}" />
+    </div>
   </div>
 </div>
