@@ -65,7 +65,38 @@ router.get('/track-features/:trackID', function(req, res){
 
   request.get(options, function(err, response, body){
     console.log('got features.', body);
-    res.send(body);    
+    res.send(body);
+  });
+});
+
+router.post('/album-features', function(req, res){
+  var tracks = req.body;
+  var trackString = '';
+  tracks.items.map(function(track, index){
+    if(index !== tracks.items.length - 1){
+      trackString += track.id + ',';
+    } else {
+      trackString += track.id;
+    }
+  });
+
+  var options = {
+    url: 'https://api.spotify.com/v1/audio-features?ids=' + trackString,
+    headers: {'Authorization': 'Bearer ' + authorize.access_token},
+    json: true
+  };
+
+  request.get(options, function(err, response, body){
+    console.log('album features body:', body, options);
+    body.audio_features.map(function(feature){
+      tracks.items.map(function(track){
+        if(track.id === feature.id){
+          track.features = feature;
+        }
+      });
+    });
+
+    res.send(tracks);
   });
 });
 

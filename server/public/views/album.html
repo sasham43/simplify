@@ -1,5 +1,7 @@
 <div class="examine">
+  <button class="btn btn-start" ng-click="ec.analyzeAlbum(ec.currentAlbum.tracks)">analyze album</button>
   <div class="trackContainer center-block">
+
     <img class="" src="{{ec.currentAlbum.images[0].url}}" />
     <div class="tracks">
       <div class="track col-md-10" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks.items">
