@@ -44,6 +44,7 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   console.log('albums here?', hc.albums);
 
   hc.user = {};
+  hc.albums = AlbumFactory.albums;
 
   UserTrackFactory.getUserInfo().then(function(response){
     hc.user = response.data;
@@ -53,12 +54,8 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   // start spin
   hc.spinning = true;
 
-  if(!hc.albums){
-    AlbumFactory.getAlbums().then(function(response){
-      console.log('Album response:', response.data);
-      hc.albums = response.data.albums;
-      hc.spinning = false;
-    });
+  if(hc.albums.length <= 0){
+    AlbumFactory.getAlbums();
   }
 
 
@@ -75,7 +72,7 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
     AlbumFactory.examineAlbum(album);
   };
 
-  console.log('home controller loaded.');
+  console.log('home controller loaded.', hc.albums);
 }]);
 
 angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', function(AlbumFactory){
@@ -106,7 +103,10 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   var currentAlbum = {album:{}};
 
   var getAlbums = function(){
-    return $http.get('/spotify/albums');
+    $http.get('/spotify/albums').then(function(response){
+      console.log('Album response:', response.data);
+      angular.copy(response.data.albums, albums);
+    });;
   };
 
   var examineAlbum = function(album){
@@ -117,7 +117,8 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   return {
     currentAlbum: currentAlbum,
     examineAlbum: examineAlbum,
-    getAlbums: getAlbums
+    getAlbums: getAlbums,
+    albums: albums
   }
 }]);
 

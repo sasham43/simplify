@@ -30,7 +30,9 @@ router.get('/albums', function(req, res){
   };
 
   // recursively get all of a users' saved albums
+  var pages = 0;
   var getAlbums = function(err, response, body){
+    console.log('Getting page', pages);
     if(body.items){
       body.items.map(function(album){
         albums.push(album);
@@ -44,6 +46,7 @@ router.get('/albums', function(req, res){
         res.send({albums:albums});
       }
     }
+    pages++;
   };
 
   request.get(options, getAlbums);
