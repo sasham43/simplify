@@ -102,7 +102,9 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     AlbumFactory.analyzeAlbum(tracks);
   };
 
-  console.log('examine controller loaded.');
+  //AlbumFactory.analyzeAlbum(ec.currentAlbum.tracks);
+
+  console.log('examine controller loaded.', ec.currentAlbum);
 }]);
 
 
@@ -124,6 +126,15 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   var examineAlbum = function(album){
     $location.url('/album');
     currentAlbum.album = album;
+    console.log('examining album:', album);
+    $http.post('/spotify/album-features', album.album.tracks).then(function(response){
+      console.log('album features response:', response.data);
+      currentAlbum.album = album;
+      console.log('currentAlbum:', currentAlbum);
+      currentAlbum.album.album.tracks = response.data;
+      console.log('currentAlbum2:', currentAlbum);
+    });
+
   };
 
   var analyzeTrack = function(track){

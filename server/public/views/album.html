@@ -4,11 +4,17 @@
 
     <img class="" src="{{ec.currentAlbum.images[0].url}}" />
     <div class="tracks">
-      <div class="track col-md-10" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks.items">
+      <div class="track col-md-8" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks.items">
         {{$index+1}} {{track.name}}
       </div>
-      <div class="col-md-2" ng-repeat-end>
-        <button class="btn btn-analyze" ng-click="ec.analyzeTrack(track)">analyze</button>
+      <div class="col-md-1 col-md-offset-1 danceNumber">
+        {{track.features.danceability}}
+      </div>
+      <div class="col-md-1 energyNumber">
+        {{track.features.energy}}
+      </div>
+      <div class="col-md-1 valenceNumber" ng-repeat-end>
+        {{track.features.valence}}
       </div>
     </div>
   </div>

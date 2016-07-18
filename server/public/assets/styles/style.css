@@ -95,3 +95,19 @@ a, a:hover{
   position:relative;
   width:640px;
 }
+
+.danceNumber{
+  color: magenta;
+}
+
+.energyNumber{
+  color: yellow;
+}
+
+.valenceNumber{
+  color: green;
+}
+
+.danceNumber, .energyNumber, .valenceNumber{
+  margin: 0 5px;
+}

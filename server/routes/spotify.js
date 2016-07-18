@@ -87,8 +87,17 @@ router.post('/album-features', function(req, res){
   };
 
   request.get(options, function(err, response, body){
-    console.log('album features body:', body, options);
+    // console.log('album features body:', body, options);
     body.audio_features.map(function(feature){
+
+      for (num in feature){
+        console.log('type',typeof feature[num]);
+        if(typeof feature[num] === 'number'){
+          //feature[num] *= 100;
+          feature[num] = Math.floor(feature[num] * 100);
+        }
+      }
+
       tracks.items.map(function(track){
         if(track.id === feature.id){
           track.features = feature;
