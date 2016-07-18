@@ -52,6 +52,23 @@ router.get('/albums', function(req, res){
   request.get(options, getAlbums);
 });
 
+router.get('/track-features/:trackID', function(req, res){
+  console.log('getting track features...');
+  var features = {};
+  var trackID = req.params.trackID;
+
+  var options = {
+    url: 'https://api.spotify.com/v1/audio-features/' + trackID,
+    headers: {'Authorization': 'Bearer ' + authorize.access_token},
+    json: true
+  };
+
+  request.get(options, function(err, response, body){
+    console.log('got features.', body);
+    res.send(body);    
+  });
+});
+
 
 
 module.exports = router;

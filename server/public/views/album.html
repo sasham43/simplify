@@ -2,8 +2,11 @@
   <div class="trackContainer center-block">
     <img class="" src="{{ec.currentAlbum.images[0].url}}" />
     <div class="tracks">
-      <div class="track" ng-style="ec.trackStyles" ng-repeat="track in ec.currentAlbum.tracks.items">
+      <div class="track col-md-10" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks.items">
         {{$index+1}} {{track.name}}
+      </div>
+      <div class="col-md-2" ng-repeat-end>
+        <button class="btn btn-analyze" ng-click="ec.analyzeTrack(track)">analyze</button>
       </div>
     </div>
   </div>
