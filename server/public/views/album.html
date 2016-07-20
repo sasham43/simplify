@@ -1,5 +1,20 @@
 <div class="examine">
-  <button class="btn btn-start" ng-click="ec.analyzeAlbum(ec.currentAlbum.tracks)">analyze album</button>
+  <!-- <button class="btn btn-start" ng-click="ec.analyzeAlbum(ec.currentAlbum.tracks)">analyze album</button> -->
+
+  <div class="row examineHeaderContainer center-block">
+    <div class="col-md-8 text-center">
+      track
+    </div>
+    <div class="col-md-1 danceNumber">
+      dance
+    </div>
+    <div class="col-md-1 energyNumber">
+      energy
+    </div>
+    <div class="col-md-1 valenceNumber">
+      positivity
+    </div>
+  </div>
   <div class="trackContainer center-block">
 
     <img class="" src="{{ec.currentAlbum.images[0].url}}" />

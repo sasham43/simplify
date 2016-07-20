@@ -96,18 +96,23 @@ a, a:hover{
   width:640px;
 }
 
+.examineHeaderContainer{
+  width: 640px;
+}
+
 .danceNumber{
   color: magenta;
 }
 
 .energyNumber{
-  color: yellow;
+  color: orangered;
 }
 
 .valenceNumber{
-  color: green;
+  color: lawngreen;
 }
 
 .danceNumber, .energyNumber, .valenceNumber{
   margin: 0 5px;
+  text-shadow: 1px 1px #333;
 }

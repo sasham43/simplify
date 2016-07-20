@@ -91,7 +91,7 @@ router.post('/album-features', function(req, res){
     body.audio_features.map(function(feature){
 
       for (num in feature){
-        console.log('type',typeof feature[num]);
+        //console.log('type',typeof feature[num]);
         if(typeof feature[num] === 'number'){
           //feature[num] *= 100;
           feature[num] = Math.floor(feature[num] * 100);
