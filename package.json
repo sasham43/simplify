@@ -5,6 +5,7 @@
   "dependencies": {
     "angular": "^1.5.5",
     "angular-route": "^1.5.5",
+    "async": "^2.0.0",
     "body-parser": "^1.15.0",
     "bootstrap": "^3.3.6",
     "dotenv": "^2.0.0",
