@@ -8,20 +8,15 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
       controller: 'SplashController',
       controllerAs: 'sc'
     })
-    .when('/about', {
-      templateUrl: '/views/about.html',
-      controller: 'AboutController',
-      controllerAs: 'ac'
-    })
     .when('/login', {
       templateUrl: '/views/login.html',
       controller: 'LoginController',
       controllerAs: 'lc'
     })
-    .when('/home', {
-      templateUrl: '/views/home.html',
-      controller: 'HomeController',
-      controllerAs: 'hc'
+    .when('/albums', {
+      templateUrl: '/views/albums.html',
+      controller: 'AlbumsController',
+      controllerAs: 'ac'
     })
     .when('/album', {
       templateUrl: '/views/album.html',
@@ -35,20 +30,32 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
     $locationProvider.html5Mode(true);
 }]);
 
-angular.module('simplifyApp').controller('SplashController',['$http', function($http){
-  console.log('Splash controller loaded.');
+angular.module('simplifyApp').controller('IndexController',['$http', '$location', function($http, $location){
+  var ic = this;
+
+  if($location.url() == '/'){
+    ic.showNav = false;
+  } else {
+    ic.showNav = true;
+  }
+  console.log('Index controller loaded.', $location.url());
 }]);
 
-angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', 'AlbumFactory', function(UserTrackFactory, AlbumFactory){
-  var hc = this;
-  console.log('albums here?', hc.albums);
+angular.module('simplifyApp').controller('SplashController',['$http', '$location', function($http, $location){
+  // if($location.url() == '/')
+  console.log('Splash controller loaded.', $location.url());
+}]);
 
-  hc.user = {};
-  hc.albums = AlbumFactory.albums;
+angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory', 'AlbumFactory', function(UserTrackFactory, AlbumFactory){
+  var ac = this;
+  console.log('albums here?', ac.albums);
+
+  ac.user = {};
+  ac.albums = AlbumFactory.albums;
 
   UserTrackFactory.getUserInfo().then(function(response){
-    hc.user = response.data;
-    console.log('User info:', hc.user);
+    ac.user = response.data;
+    console.log('User info:', ac.user);
   });
 
   // start spin
@@ -58,37 +65,37 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   //   AlbumFactory.updateAlbums();
   // }
 
-  hc.getAlbums = function(){
-    hc.spinning = true;
-    AlbumFactory.getAlbums(hc.stopSpin);
+  ac.getAlbums = function(){
+    ac.spinning = true;
+    AlbumFactory.getAlbums(ac.stopSpin);
   };
 
-  hc.stopSpin = function(){
-    hc.spinning = false;
+  ac.stopSpin = function(){
+    ac.spinning = false;
   };
 
-  hc.updateAlbums = function(){
-    hc.spinning = true; // start spin
-    AlbumFactory.updateAlbums(hc.stopSpin);
+  ac.updateAlbums = function(){
+    ac.spinning = true; // start spin
+    AlbumFactory.updateAlbums(ac.stopSpin);
   };
 
 
   // hover states
-  hc.showAlbumOverlay = function(album){
+  ac.showAlbumOverlay = function(album){
     album.show = true;
   };
-  hc.hideAlbumOverlay = function(album){
+  ac.hideAlbumOverlay = function(album){
     album.show = false;
   };
 
   // examine album
-  hc.examineAlbum = function(album){
+  ac.examineAlbum = function(album){
     AlbumFactory.examineAlbum(album);
   };
 
-  hc.getAlbums();
+  ac.getAlbums();
 
-  console.log('home controller loaded.', hc.albums);
+  console.log('albums controller loaded.', ac.albums);
 }]);
 
 angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', function(AlbumFactory){

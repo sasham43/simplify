@@ -17,8 +17,12 @@
     <base href="/">
   </head>
   <body>
-    <div class="container-fluid">
-      <div class="jumbotron">
+    <div class="container-fluid" ng-controller="IndexController as ic">
+      <div class="jumbotron" >
+        <div class="nav" ng-show="ic.showNav">
+          <a id="navHome" href="/">home</a>
+          <a id="navAlbums" href="/albums">albums</a>
+        </div>
         <h1 class="text-center">simplify</h1>
       </div>
       <div ng-view>

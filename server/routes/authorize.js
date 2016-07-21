@@ -43,7 +43,7 @@ router.get('/', passport.authenticate('spotify', {scope: ['user-read-email', 'us
 router.get('/callback', passport.authenticate('spotify', {failureRedirect: '/fail'}), function(req, res){
   // success
   console.log('successfully authenticated.', req.user);
-  res.redirect('/home');
+  res.redirect('/albums');
 });
 
 router.get('/info', ensureAuthenticated, function(req, res){
