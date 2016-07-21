@@ -6,7 +6,6 @@ var connectionString = 'postgres://localhost:5432/simplify';
 function initialize(){
   async.series([
     createUsersTable,
-    createArtistsTable,
     createAlbumsTable
   ], function(err){
     if(err){
@@ -58,7 +57,7 @@ function createArtistsTable(callback){
     } else {
       // create inital schema
       var query = client.query('CREATE TABLE IF NOT EXISTS artists ('+
-      'id int PRIMARY KEY,' +
+      'id text PRIMARY KEY,' +
       'name varchar(80)' +
       ')');
 
@@ -85,13 +84,13 @@ function createAlbumsTable(callback){
     } else {
       // create inital schema
       var query = client.query('CREATE TABLE IF NOT EXISTS albums ('+
-      'id int PRIMARY KEY,' +
-      'artist_id int REFERENCES "artists"(id),' +
+      'id text PRIMARY KEY,' +
+      'artist_name text,' +
       'image_small varchar(80),' +
       'image_medium varchar(80),' +
       'image_large varchar(80),' +
       'name varchar(80),' +
-      'release_date date,' +
+      'release_date text,' + // this is getting borked, it's doing math instead of treating it like a string
       'popularity int' +
       ')');
 
