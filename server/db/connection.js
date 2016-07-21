@@ -32,8 +32,7 @@ function createUsersTable(callback){
       'email varchar(80),' +
       'image_url varchar(100),' +
       'product varchar(50),' +
-      'spotify_url varchar(80),' +
-      'saved_albums text[]' +
+      'spotify_url varchar(80)' +
       ')');
 
       query.on('end', function(){
