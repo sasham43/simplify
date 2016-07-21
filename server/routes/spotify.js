@@ -22,7 +22,7 @@ router.get('/info', function(req, res){
   });
 });
 
-router.get('/albums', function(req, res){
+router.get('/albums/update', function(req, res){
   console.log('getting albums...');
   var albums = [];
   var options = {
@@ -36,9 +36,9 @@ router.get('/albums', function(req, res){
   var getAlbums = function(err, response, body){
     console.log('Getting page', pages);
     if(body.items){
-      // body.items.map(function(album){
-      //   albums.push(album);
-      // });
+      body.items.map(function(album){
+        albums.push(album);
+      });
 
       // save albums to database
       pg.connect(connectionString, function(err, client, done){

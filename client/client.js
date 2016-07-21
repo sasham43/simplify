@@ -52,11 +52,20 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   });
 
   // start spin
-  hc.spinning = true;
+//  hc.spinning = true;
 
-  if(hc.albums.length <= 0){
-    AlbumFactory.getAlbums();
-  }
+  // if(hc.albums.length <= 0){
+  //   AlbumFactory.updateAlbums();
+  // }
+
+  hc.stopSpin = function(){
+    hc.spinning = false;
+  };
+
+  hc.updateAlbums = function(){
+    hc.spinning = true; // start spin
+    AlbumFactory.updateAlbums(hc.stopSpin);
+  };
 
 
   // hover states
@@ -116,10 +125,12 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   var features = {features:{}};
   var albumFeatures = {};
 
-  var getAlbums = function(){
-    $http.get('/spotify/albums').then(function(response){
+  var updateAlbums = function(stopSpin){
+    $http.get('/spotify/albums/update').then(function(response){
       console.log('Album response:', response.data);
       angular.copy(response.data.albums, albums);
+      //updateStatus = {response: response.data};
+      stopSpin();
     });;
   };
 
@@ -154,7 +165,7 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   return {
     currentAlbum: currentAlbum,
     examineAlbum: examineAlbum,
-    getAlbums: getAlbums,
+    updateAlbums: updateAlbums,
     albums: albums,
     analyzeTrack: analyzeTrack,
     features: features,

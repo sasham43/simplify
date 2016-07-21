@@ -17,6 +17,7 @@ a, a:hover{
   color: #333;
   background-color: chartreuse;
   border-color: #333;
+  outline-color: invert;
 }
 
 .jumbotron{
