@@ -22,8 +22,36 @@ router.get('/info', function(req, res){
   });
 });
 
-router.get('/albums/update', function(req, res){
+router.get('/albums/stored', function(req, res){
   console.log('getting albums...');
+  var storedAlbums = [];
+
+  pg.connect(connectionString, function(err, client, done){
+    if(err){
+      console.log('Error connecting to db to get albums.');
+    } else {
+      var queryString = 'SELECT * FROM albums';
+      var query = client.query(queryString);
+
+      query.on('error', function(err){
+        console.log('Error getting albums:', err);
+        process.exit(1);
+      });
+
+      query.on('row', function(row){
+        storedAlbums.push(row);
+      });
+
+      query.on('end', function(){
+        console.log('Got saved albums.');
+        res.send({storedAlbums: storedAlbums});
+      });
+    }
+  });
+});
+
+router.get('/albums/update', function(req, res){
+  console.log('updating albums...');
   var albums = [];
   var options = {
     url: 'https://api.spotify.com/v1/me/albums?limit=50',
@@ -77,10 +105,7 @@ router.get('/albums/update', function(req, res){
             }
           });
 
-          console.log('queryString:', queryString);
-
-          // var multipleValues = Inserts('$1, $2, $3, $4, $5, $6, $7, $8', filteredAlbums);
-          // console.log('multiple values:', multipleValues);
+          //console.log('queryString:', queryString);
 
           var query = client.query(queryString);
 

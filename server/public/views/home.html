@@ -11,7 +11,7 @@
   <div class="albums">
     <div class="album col-sm-5 col-sm-offset-1 col-md-4 center-block" ng-repeat="album in hc.albums">
       <div class="overlayContainer center-block" ng-mouseover="hc.showAlbumOverlay(album)" ng-mouseleave="hc.hideAlbumOverlay(album)">
-        <img class="cover " ng-src="{{album.album.images[1].url}}" />
+        <img class="cover " ng-src="{{album.image_medium}}" />
         <div class="overlay" ng-show="album.show">
           <button ng-click="hc.examineAlbum(album)" class="btn btn-look center-block">look</button>
         </div>

@@ -58,6 +58,11 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   //   AlbumFactory.updateAlbums();
   // }
 
+  hc.getAlbums = function(){
+    hc.spinning = true;
+    AlbumFactory.getAlbums(hc.stopSpin);
+  };
+
   hc.stopSpin = function(){
     hc.spinning = false;
   };
@@ -80,6 +85,8 @@ angular.module('simplifyApp').controller('HomeController',['UserTrackFactory', '
   hc.examineAlbum = function(album){
     AlbumFactory.examineAlbum(album);
   };
+
+  hc.getAlbums();
 
   console.log('home controller loaded.', hc.albums);
 }]);
@@ -124,11 +131,21 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   var currentAlbum = {album:{}};
   var features = {features:{}};
   var albumFeatures = {};
+  //var storedAlbums = [];
+
+  var getAlbums = function(stopSpin){
+    $http.get('/spotify/albums/stored').then(function(response){
+      console.log('Stored album response:', response.data);
+      angular.copy(response.data.storedAlbums, albums);
+      stopSpin();
+    });
+  };
 
   var updateAlbums = function(stopSpin){
     $http.get('/spotify/albums/update').then(function(response){
       console.log('Album response:', response.data);
-      angular.copy(response.data.albums, albums);
+      getAlbums();
+      //angular.copy(response.data.albums, albums);
       //updateStatus = {response: response.data};
       stopSpin();
     });;
@@ -145,7 +162,6 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
       currentAlbum.album.album.tracks = response.data;
       console.log('currentAlbum2:', currentAlbum);
     });
-
   };
 
   var analyzeTrack = function(track){
@@ -162,6 +178,8 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     });
   };
 
+
+
   return {
     currentAlbum: currentAlbum,
     examineAlbum: examineAlbum,
@@ -170,7 +188,8 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     analyzeTrack: analyzeTrack,
     features: features,
     analyzeAlbum: analyzeAlbum,
-    albumFeatures: albumFeatures
+    albumFeatures: albumFeatures,
+    getAlbums: getAlbums
   }
 }]);
 
