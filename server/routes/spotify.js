@@ -156,7 +156,7 @@ router.get('/albums/update', function(req, res){
               }
             });
 
-            console.log('queryString:', queryString);
+            //console.log('queryString:', queryString);
 
             var query = client.query(queryString);
 

@@ -1,36 +1,21 @@
 <div class="examine">
-  <!-- <button class="btn btn-start" ng-click="ec.analyzeAlbum(ec.currentAlbum.tracks)">analyze album</button> -->
-
-  <div class="row examineHeaderContainer center-block">
-    <div class="col-md-8 text-center">
-      track
-    </div>
-    <div class="col-md-1 danceNumber">
-      dance
-    </div>
-    <div class="col-md-1 energyNumber">
-      energy
-    </div>
-    <div class="col-md-1 valenceNumber">
-      positivity
-    </div>
+  <div class="row text-center">
+    <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
   </div>
-  <div class="trackContainer center-block">
-
-    <img class="" src="{{ec.currentAlbum.image_large}}" />
-    <div class="tracks">
-      <div class="track col-md-8" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks">
+  <div class="row">
+    <div class="tracks col-md-4">
+      <div class="track" ng-repeat="track in ec.currentAlbum.tracks">
         {{$index+1}} {{track.track_name}}
       </div>
-      <div class="col-md-1 col-md-offset-1 danceNumber">
-        {{track.features.danceability}}
-      </div>
-      <div class="col-md-1 energyNumber">
-        {{track.features.energy}}
-      </div>
-      <div class="col-md-1 valenceNumber" ng-repeat-end>
-        {{track.features.valence}}
-      </div>
+    </div>
+    <div class="cover col-md-4">
+      <img class="center-block" ng-src="{{ec.currentAlbum.image_medium}}" />
+    </div>
+    <div class="data col-md-4">
+      data
     </div>
   </div>
+
+
+
 </div>

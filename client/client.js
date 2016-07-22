@@ -108,9 +108,9 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
 
   ec.currentAlbum = AlbumFactory.currentAlbum.album;
 
-  ec.trackStyles = {
-    height: (600 / ec.currentAlbum.tracks.length) + 'px'
-  };
+  // ec.trackStyles = {
+  //   height: (600 / ec.currentAlbum.tracks.length) + 'px'
+  // };
 
   // hover states
   ec.showAlbumOverlay = function(){
