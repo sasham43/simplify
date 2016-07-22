@@ -93,7 +93,7 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
     AlbumFactory.examineAlbum(album);
   };
 
-  ac.getAlbums();
+  ac.getAlbums(ac.stopSpin);
 
   console.log('albums controller loaded.', ac.albums);
 }]);
@@ -142,7 +142,7 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
 
   var getAlbums = function(stopSpin){
     $http.get('/spotify/albums/stored').then(function(response){
-      console.log('Stored album response:', response.data);
+      console.log('Stored album response:', response.data, stopSpin);
       angular.copy(response.data.storedAlbums, albums);
       stopSpin();
     });
@@ -150,11 +150,11 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
 
   var updateAlbums = function(stopSpin){
     $http.get('/spotify/albums/update').then(function(response){
-      console.log('Album response:', response.data);
-      getAlbums();
+      console.log('Album response:', response.data, stopSpin);
+      getAlbums(stopSpin);
       //angular.copy(response.data.albums, albums);
       //updateStatus = {response: response.data};
-      stopSpin();
+      //stopSpin();
     });;
   };
 

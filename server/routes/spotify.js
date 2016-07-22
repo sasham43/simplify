@@ -78,20 +78,6 @@ router.get('/albums/update', function(req, res){
           var filteredAlbums = [];
 
           body.items.map(function(album, index){
-            //console.log('building query string album', index);
-            // var tempAlbum = [
-            //   album.album.id,
-            //   album.album.artists[0].id,
-            //   album.album.images[2].url,
-            //   album.album.images[1].url,
-            //   album.album.images[0].url,
-            //   album.album.name,
-            //   album.album.release_date,
-            //   album.album.popularity
-            // ];
-            //
-            // filteredAlbums.push(tempAlbum);
-
             var re = new RegExp("'", "g");
 
             var albumName = album.album.name.replace(re, "''");
@@ -125,6 +111,52 @@ router.get('/albums/update', function(req, res){
         options.url = body.next;
         request.get(options, getAlbums);
       } else {
+        console.log('albums:', albums);
+        // save tracks to database
+        pg.connect(connectionString, function(err, client, done){
+          if(err){
+            console.log('Error connecting to database:', err);
+          } else {
+            var queryString = 'INSERT INTO tracks (id, album_id, artist_name, name, track_number, duration_ms) VALUES ';
+
+            // build query string
+            albums.map(function(album, index){
+              //console.log('tracks album:', album);
+              album.album.tracks.items.map(function(track, ti){
+                var re = new RegExp("'", "g"); // sanitize input
+                var artistName = album.album.artists[0].name.replace(re, "''");
+                var trackName = track.name.replace(re, "''");
+
+                queryString += `(\'${track.id}\', \'${album.album.id}\', \'${artistName}\', \'${trackName}\', ${track.track_number}, ${track.duration_ms})`;
+                if(ti === album.album.tracks.items.length - 1){
+                  queryString += '';
+                } else {
+                  queryString += ',';
+                }
+              });
+              if(index === albums.length - 1){
+                queryString += ' ON CONFLICT DO NOTHING;';
+              } else {
+                queryString += ',';
+              }
+            });
+
+            console.log('queryString:', queryString);
+
+            var query = client.query(queryString);
+
+            query.on('error', function(err){
+              console.log('Error saving tracks:', err);
+              process.exit(1);
+            });
+
+            query.on('end', function(){
+              console.log('Saved tracks.');
+              done();
+            });
+          }
+        });
+
         console.log('got albums.');
         res.send({albums:albums});
       }
