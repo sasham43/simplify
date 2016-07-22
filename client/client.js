@@ -33,11 +33,16 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
 angular.module('simplifyApp').controller('IndexController',['$http', '$location', function($http, $location){
   var ic = this;
 
-  if($location.url() == '/'){
-    ic.showNav = false;
-  } else {
-    ic.showNav = true;
-  }
+  ic.checkLocation = function(){
+    if($location.url() == '/'){
+      ic.showNav = false;
+    } else {
+      ic.showNav = true;
+    }
+  };
+
+  ic.checkLocation();
+
   console.log('Index controller loaded.', $location.url());
 }]);
 
@@ -101,10 +106,10 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', function(AlbumFactory){
   var ec = this;
 
-  ec.currentAlbum = AlbumFactory.currentAlbum.album.album;
+  ec.currentAlbum = AlbumFactory.currentAlbum.album;
 
   ec.trackStyles = {
-    height: (600 / ec.currentAlbum.tracks.items.length) + 'px'
+    height: (600 / ec.currentAlbum.tracks.length) + 'px'
   };
 
   // hover states
@@ -162,11 +167,11 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     $location.url('/album');
     currentAlbum.album = album;
     console.log('examining album:', album);
-    $http.post('/spotify/album-features', album.album.tracks).then(function(response){
+    $http.post('/spotify/album-features', album.tracks).then(function(response){
       console.log('album features response:', response.data);
       currentAlbum.album = album;
       console.log('currentAlbum:', currentAlbum);
-      currentAlbum.album.album.tracks = response.data;
+      currentAlbum.album.tracks = response.data;
       console.log('currentAlbum2:', currentAlbum);
     });
   };

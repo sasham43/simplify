@@ -123,10 +123,10 @@ function createTracksTable(callback){
     } else {
       // create initial schema
       var query = client.query('CREATE TABLE IF NOT EXISTS tracks ('+
-      'id text PRIMARY KEY,' +
+      'track_id text PRIMARY KEY,' +
       'album_id text REFERENCES "albums"(id),' +
       'artist_name text,' +
-      'name text,' +
+      'track_name text,' +
       'track_number int,' +
       'danceability float,' +
       'duration_ms int,' +

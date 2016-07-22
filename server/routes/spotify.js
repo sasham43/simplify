@@ -30,7 +30,7 @@ router.get('/albums/stored', function(req, res){
     if(err){
       console.log('Error connecting to db to get albums.');
     } else {
-      var queryString = 'SELECT * FROM albums';
+      var queryString = 'SELECT * FROM tracks INNER JOIN albums ON tracks.album_id = albums.id';
       var query = client.query(queryString);
 
       query.on('error', function(err){
@@ -38,13 +38,28 @@ router.get('/albums/stored', function(req, res){
         process.exit(1);
       });
 
+      var tempAlbum = {album_id: '', tracks:[]};
       query.on('row', function(row){
-        storedAlbums.push(row);
+        //console.log('row:', row);
+
+        if((row.album_id !== tempAlbum.album_id) && (tempAlbum.album_id !== '')){
+          storedAlbums.push(tempAlbum);
+          tempAlbum = {album_id: row.album_id, tracks:[]};
+        }
+        tempAlbum.album_id = row.album_id;
+        tempAlbum.name = row.name;
+        tempAlbum.popularity = row.popularity;
+        tempAlbum.image_small = row.image_small;
+        tempAlbum.image_medium = row.image_medium;
+        tempAlbum.image_large = row.image_large;
+        tempAlbum.artist_name = row.artist_name;
+        tempAlbum.tracks.push(row);
       });
 
       query.on('end', function(){
         console.log('Got saved albums.');
         res.send({storedAlbums: storedAlbums});
+        done();
       });
     }
   });
@@ -187,11 +202,11 @@ router.get('/track-features/:trackID', function(req, res){
 router.post('/album-features', function(req, res){
   var tracks = req.body;
   var trackString = '';
-  tracks.items.map(function(track, index){
-    if(index !== tracks.items.length - 1){
-      trackString += track.id + ',';
+  tracks.map(function(track, index){
+    if(index !== tracks.length - 1){
+      trackString += track.track_id + ',';
     } else {
-      trackString += track.id;
+      trackString += track.track_id;
     }
   });
 
@@ -202,7 +217,7 @@ router.post('/album-features', function(req, res){
   };
 
   request.get(options, function(err, response, body){
-    // console.log('album features body:', body, options);
+     console.log('album features body:', body, options);
     body.audio_features.map(function(feature){
 
       for (num in feature){
@@ -213,8 +228,8 @@ router.post('/album-features', function(req, res){
         }
       }
 
-      tracks.items.map(function(track){
-        if(track.id === feature.id){
+      tracks.map(function(track){
+        if(track.track_id === feature.id){
           track.features = feature;
         }
       });
@@ -223,22 +238,5 @@ router.post('/album-features', function(req, res){
     res.send(tracks);
   });
 });
-
-// Concatenates an array of objects or arrays of values, according to the template,
-// to use with insert queries. Can be used either as a class type or as a function.
-//
-// template = formatting template string
-// data = array of either objects or arrays of values
-function Inserts(template, data) {
-    if (!(this instanceof Inserts)) {
-        return new Inserts(template, data);
-    }
-    this._rawDBType = true;
-    this.formatDBType = function () {
-        return data.map(d=>'(' + pgp.as.format(template, d) + ')').join(',');
-    };
-}
-
-
 
 module.exports = router;

@@ -17,10 +17,10 @@
   </div>
   <div class="trackContainer center-block">
 
-    <img class="" src="{{ec.currentAlbum.images[0].url}}" />
+    <img class="" src="{{ec.currentAlbum.image_large}}" />
     <div class="tracks">
-      <div class="track col-md-8" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks.items">
-        {{$index+1}} {{track.name}}
+      <div class="track col-md-8" ng-style="ec.trackStyles" ng-repeat-start="track in ec.currentAlbum.tracks">
+        {{$index+1}} {{track.track_name}}
       </div>
       <div class="col-md-1 col-md-offset-1 danceNumber">
         {{track.features.danceability}}
