@@ -128,16 +128,16 @@ function createTracksTable(callback){
       'artist_name text,' +
       'track_name text,' +
       'track_number int,' +
-      'danceability float,' +
+      'danceability int,' +
       'duration_ms int,' +
       'key int,' +
-      'loudness float,' +
-      'speechiness float,' +
-      'liveness float,' +
+      'loudness int,' +
+      'speechiness int,' +
+      'liveness int,' +
       'tempo int,' +
       'time_signature int,' +
-      'energy float,' +
-      'valence float,' +
+      'energy int,' +
+      'valence int,' +
       'popularity int' +
       ')');
 

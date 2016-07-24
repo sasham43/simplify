@@ -24,45 +24,43 @@ router.get('/info', function(req, res){
 
 router.get('/albums/stored', function(req, res){
   console.log('getting albums...');
-  var storedAlbums = [];
+  // var storedAlbums = [];
 
-  pg.connect(connectionString, function(err, client, done){
-    if(err){
-      console.log('Error connecting to db to get albums.');
-    } else {
-      var queryString = 'SELECT * FROM tracks INNER JOIN albums ON tracks.album_id = albums.id';
-      var query = client.query(queryString);
 
-      query.on('error', function(err){
-        console.log('Error getting albums:', err);
-        process.exit(1);
-      });
+      var storedAlbums = getAlbumsWithTracks(res, false);
+      //res.send({storedAlbums: storedAlbums});
 
-      var tempAlbum = {album_id: '', tracks:[]};
-      query.on('row', function(row){
-        //console.log('row:', row);
-
-        if((row.album_id !== tempAlbum.album_id) && (tempAlbum.album_id !== '')){
-          storedAlbums.push(tempAlbum);
-          tempAlbum = {album_id: row.album_id, tracks:[]};
-        }
-        tempAlbum.album_id = row.album_id;
-        tempAlbum.name = row.name;
-        tempAlbum.popularity = row.popularity;
-        tempAlbum.image_small = row.image_small;
-        tempAlbum.image_medium = row.image_medium;
-        tempAlbum.image_large = row.image_large;
-        tempAlbum.artist_name = row.artist_name;
-        tempAlbum.tracks.push(row);
-      });
-
-      query.on('end', function(){
-        console.log('Got saved albums.');
-        res.send({storedAlbums: storedAlbums});
-        done();
-      });
-    }
-  });
+      // var queryString = 'SELECT * FROM tracks INNER JOIN albums ON tracks.album_id = albums.id';
+      // var query = client.query(queryString);
+      //
+      // query.on('error', function(err){
+      //   console.log('Error getting albums:', err);
+      //   process.exit(1);
+      // });
+      //
+      // var tempAlbum = {album_id: '', tracks:[]};
+      // query.on('row', function(row){
+      //   //console.log('row:', row);
+      //
+      //   if((row.album_id !== tempAlbum.album_id) && (tempAlbum.album_id !== '')){
+      //     storedAlbums.push(tempAlbum);
+      //     tempAlbum = {album_id: row.album_id, tracks:[]};
+      //   }
+      //   tempAlbum.album_id = row.album_id;
+      //   tempAlbum.name = row.name;
+      //   tempAlbum.popularity = row.popularity;
+      //   tempAlbum.image_small = row.image_small;
+      //   tempAlbum.image_medium = row.image_medium;
+      //   tempAlbum.image_large = row.image_large;
+      //   tempAlbum.artist_name = row.artist_name;
+      //   tempAlbum.tracks.push(row);
+      // });
+      //
+      // query.on('end', function(){
+      //   console.log('Got saved albums.');
+      //   res.send({storedAlbums: storedAlbums});
+      //   done();
+      // });
 });
 
 router.get('/albums/update', function(req, res){
@@ -218,25 +216,169 @@ router.post('/album-features', function(req, res){
 
   request.get(options, function(err, response, body){
      console.log('album features body:', body, options);
-    body.audio_features.map(function(feature){
+    // body.audio_features.map(function(feature){
+    //
+    //   for (num in feature){
+    //     //console.log('type',typeof feature[num]);
+    //     if(typeof feature[num] === 'number'){
+    //       //feature[num] *= 100;
+    //       feature[num] = Math.floor(feature[num] * 100);
+    //     }
+    //   }
+    //
+    //   tracks.map(function(track){
+    //     if(track.track_id === feature.id){
+    //       track.features = feature;
+    //     }
+    //   });
+    // });
 
-      for (num in feature){
-        //console.log('type',typeof feature[num]);
-        if(typeof feature[num] === 'number'){
-          //feature[num] *= 100;
-          feature[num] = Math.floor(feature[num] * 100);
-        }
-      }
-
-      tracks.map(function(track){
-        if(track.track_id === feature.id){
-          track.features = feature;
-        }
-      });
-    });
+    tracks = filterAudioFeatures(body, tracks);
 
     res.send(tracks);
   });
 });
+
+router.get('/features/albums', function(req, res){
+  var storedAlbums = getAlbumsWithTracks(res, true);
+
+
+});
+
+function getAlbumsWithTracks(res, local){
+  pg.connect(connectionString, function(err, client, done){
+    if(err){
+      console.log('Error connecting to db to get albums.');
+    } else {
+      var storedAlbums = [];
+      var queryString = 'SELECT * FROM tracks INNER JOIN albums ON tracks.album_id = albums.id';
+      var query = client.query(queryString);
+
+      query.on('error', function(err){
+        console.log('Error getting albums:', err);
+        process.exit(1);
+      });
+
+      var tempAlbum = {album_id: '', tracks:[]};
+      query.on('row', function(row){
+        //console.log('row:', row);
+
+        if((row.album_id !== tempAlbum.album_id) && (tempAlbum.album_id !== '')){
+          storedAlbums.push(tempAlbum);
+          tempAlbum = {album_id: row.album_id, tracks:[]};
+        }
+        tempAlbum.album_id = row.album_id;
+        tempAlbum.name = row.name;
+        tempAlbum.popularity = row.popularity;
+        tempAlbum.image_small = row.image_small;
+        tempAlbum.image_medium = row.image_medium;
+        tempAlbum.image_large = row.image_large;
+        tempAlbum.artist_name = row.artist_name;
+        tempAlbum.tracks.push(row);
+      });
+
+      query.on('end', function(){
+        console.log('Got saved albums.');
+        if(local){
+          storedAlbums.map(function(album){
+            // build query string
+            var ids = 'ids=';
+            album.tracks.map(function(track, index){
+              ids += track.track_id;
+              if(index !== album.tracks.length - 1){
+                ids += ',';
+              }
+            });
+
+            var options = {
+              url: 'https://api.spotify.com/v1/audio-features/?' + ids,
+              headers: {'Authorization': 'Bearer ' + authorize.access_token},
+              json: true
+            };
+
+            // get audio features from spotify
+            request.get(options, function(err, response, body){
+              if(err){
+                console.log('Failed to get audio features from spotify:', err);
+              } else {
+                //console.log('body:', body);
+                album.tracks = filterAudioFeatures(body, album.tracks);
+
+                pg.connect(connectionString, function(err, client, done){
+                  if(err){
+                    console.log('Error connecting to db:', err);
+                  } else {
+                    var queryString = 'UPDATE tracks SET (danceability, ' +
+                      'key = c.key' +
+                      'loudness = c.loudness, ' +
+                      'speechiness = c.speechiness, ' +
+                      'liveness = c.liveness, ' +
+                      'tempo = c.tempo, ' +
+                      'time_signature = c.time_signature, ' +
+                      'energy = c.energy, ' +
+                      'valence = c.valence,' +
+                      ') FROM (VALUES ';
+                    var queryEnd = ' ) AS c(track_id, key, loudness, speechiness, liveness, tempo, time_signature, energy, valence) WHERE c.track_id = tracks.track_id;';
+
+                    album.tracks.map(function(trackObject, index){
+                      var track = trackObject.features;
+                      console.log(track);
+                      queryString += `(${track.key}, ${track.loudness}, ${track.speechiness}, ${track.liveness}, ${track.tempo}, ${track.time_signature}, ${track.energy}, ${track.valence})`;
+                      if(index !== album.tracks.length - 1){
+                        queryString += ',';
+                      } else {
+                        queryString += queryEnd;
+                      }
+                    });
+
+                    console.log('queryString:', queryString);
+                    var query = client.query(queryString);
+
+                    query.on('error', function(err){
+                      console.log('Error saving audio features:', err);
+                      process.exit(1);
+                    });
+
+                    query.on('end', function(){
+                      console.log('Saved audio features.');
+                      done();
+                      res.send({storedAlbums: storedAlbums});
+                    });
+                  }
+                });
+              }
+            });
+          });
+        } else {
+          res.send({storedAlbums: storedAlbums});
+        }
+        //res.send({storedAlbums: storedAlbums});
+        //return storedAlbums;
+        done();
+      });
+    }
+  });
+}
+
+function filterAudioFeatures(body, tracks){
+  body.audio_features.map(function(feature){
+
+    for (num in feature){
+      //console.log('type',typeof feature[num]);
+      if(!Number.isInteger(feature[num])){
+        //feature[num] *= 100;
+        feature[num] = Math.floor(feature[num] * 100);
+      }
+    }
+    //console.log('tracks:', tracks);
+    tracks.map(function(track){
+      if(track.track_id === feature.id){
+        track.features = feature;
+      }
+    });
+  });
+console.log('tracks:', tracks);
+  return tracks;
+}
 
 module.exports = router;
