@@ -8,6 +8,8 @@ var session = require('express-session');
 var pg = require('pg');
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var port = process.env.PORT || 3000;
 
 ////////////import modules//////////
@@ -44,7 +46,16 @@ app.use('/', index);
 // db
 connection.initialize();
 
-//listen
-app.listen(port, function() {
-  console.log('listening on port', port + '...');
+io.on('connection', function(socket){
+  socket.emit('test', {object: 'object'});
+  socket.on('client test', function(data){
+    console.log('client test response:', data);
+  });
 });
+
+server.listen(port);
+
+//listen
+// app.listen(port, function() {
+//   console.log('listening on port', port + '...');
+// });

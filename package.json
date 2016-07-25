@@ -17,7 +17,8 @@
     "node-spotify": "^0.8.1",
     "nodemon": "^1.9.1",
     "passport": "^0.3.2",
-    "pg": "^4.5.3"
+    "pg": "^4.5.3",
+    "socket.io": "^1.4.8"
   },
   "devDependencies": {
     "grunt-contrib-watch": "^1.0.0"

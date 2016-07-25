@@ -33,6 +33,12 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
 angular.module('simplifyApp').controller('IndexController',['$http', '$location', function($http, $location){
   var ic = this;
 
+  var socket = io();
+  socket.on('test', function(data){
+    console.log('test server response:', data);
+    socket.emit('client test',{object: 'client object'});
+  });
+
   ic.checkLocation = function(){
     if($location.url() == '/'){
       ic.showNav = false;
