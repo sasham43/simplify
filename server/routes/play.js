@@ -3,6 +3,7 @@ var spotify = require('node-spotify')({appkeyFile: './spotify_appkey.key'});
 var spotifyUser = process.env.SPOTIFY_USER;
 var spotifyPass = process.env.SPOTIFY_PASS;
 var player = spotify.player;
+var io = require('../server.js').io;
 
 spotify.on({
   ready: ready
@@ -57,6 +58,23 @@ router.post('/track', function(req, res){
       console.log('track finished.');
       res.send({message: 'track finished'});
     }
+  });
+});
+
+io.on('connection', function(socket){
+  console.log('socket connected');
+  socket.emit('socket connected');
+  socket.on('play track', function(data){
+    console.log('play track');
+    var track = spotify.createFromLink(data.track_link);
+    player.play(track);
+    socket.emit('track playing', track);
+    player.on({
+      endOfTrack: function(){
+        io.emit('track finished');
+        console.log('track finished.');
+      }
+    });
   });
 });
 

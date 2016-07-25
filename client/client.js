@@ -33,11 +33,11 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
 angular.module('simplifyApp').controller('IndexController',['$http', '$location', function($http, $location){
   var ic = this;
 
-  var socket = io();
-  socket.on('test', function(data){
-    console.log('test server response:', data);
-    socket.emit('client test',{object: 'client object'});
-  });
+  // var socket = io();
+  // socket.on('test', function(data){
+  //   console.log('test server response:', data);
+  //   socket.emit('client test',{object: 'client object'});
+  // });
 
   ic.checkLocation = function(){
     if($location.url() == '/'){
@@ -136,12 +136,32 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     AlbumFactory.analyzeAlbum(tracks);
   };
 
-  ec.playAlbum = function(album){
-    AlbumFactory.playAlbum(album);
-  };
+  // ec.playAlbum = function(album){
+  //   AlbumFactory.playAlbum(album);
+  // };
+  //
+  // ec.playTrack = function(track){
+  //   AlbumFactory.playTrack(track);
+  // };
 
-  ec.playTrack = function(track){
-    AlbumFactory.playTrack(track);
+  ec.trackCount = 0;
+  var socket = io();
+  socket.on('track playing', function(data){
+    console.log('playing track:', data.name);
+  });
+  socket.on('socket connected', function(data){
+    console.log('socket connected');
+  });
+  socket.on('track finished', function(data){
+    console.log('track finished');
+    ec.trackCount++;
+    if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
+      ec.playTrack(ec.trackCount);
+    }
+  });
+
+  ec.playTrack = function(trackNumber){
+    socket.emit('play track', ec.currentAlbum.tracks[trackNumber]);
   };
 
   //AlbumFactory.analyzeAlbum(ec.currentAlbum.tracks);

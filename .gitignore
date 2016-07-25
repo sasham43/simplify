@@ -2,5 +2,5 @@ node_modules
 DS_Store
 .env
 *.min.js
-cache
-settings
+cache/
+settings/

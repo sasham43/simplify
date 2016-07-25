@@ -10,6 +10,7 @@ var pg = require('pg');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+module.exports.io = io;
 var port = process.env.PORT || 3000;
 
 ////////////import modules//////////
@@ -46,12 +47,7 @@ app.use('/', index);
 // db
 connection.initialize();
 
-io.on('connection', function(socket){
-  socket.emit('test', {object: 'object'});
-  socket.on('client test', function(data){
-    console.log('client test response:', data);
-  });
-});
+
 
 server.listen(port);
 
