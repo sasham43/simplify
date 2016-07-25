@@ -1,7 +1,9 @@
 <div class="examine">
   <div class="row text-center">
     <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
-    <button class="btn btn-default" ng-click="ec.playTrack(0)">play</button>
+  <button class="btn btn-default" ng-click="ec.prevTrack()">prev</button>
+  <button class="btn btn-default" ng-click="ec.playTrack(0)">play</button>
+  <button class="btn btn-default" ng-click="ec.nextTrack()">next</button>
   </div>
   <div class="row">
     <div class="tracks col-md-4">

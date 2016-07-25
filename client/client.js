@@ -164,6 +164,16 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     socket.emit('play track', ec.currentAlbum.tracks[trackNumber]);
   };
 
+  ec.prevTrack = function(){
+    ec.trackCount--;
+    ec.playTrack(ec.trackCount);
+  };
+
+  ec.nextTrack = function(){
+    ec.trackCount++;
+    ec.playTrack(ec.trackCount);
+  };
+
   //AlbumFactory.analyzeAlbum(ec.currentAlbum.tracks);
 
   console.log('examine controller loaded.', ec.currentAlbum);
