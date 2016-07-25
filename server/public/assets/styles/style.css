@@ -1,6 +1,6 @@
 body{
   background-color: #333;
-  color: chartreuse;
+  color: aliceblue;
 }
 
 a, a:hover{
@@ -20,25 +20,25 @@ a, a:hover{
 }
 
 .btn-default{
-  color: chartreuse;
+  color: aliceblue;
   background-color: #333;
-  border-color: chartreuse;
+  border-color: aliceblue;
 }
 
 .btn-default:hover, .btn-default:active, .btn-default:focus{
   color: #333;
-  background-color: chartreuse;
+  background-color: aliceblue;
   border-color: #333;
   outline-color: invert;
 }
 
 .jumbotron{
-  background-color: chartreuse;
+  background-color: aliceblue;
   color: #333;
 }
 
 .splash{
-  color: chartreuse;
+  color: aliceblue;
   font-size: 25px;
 }
 
@@ -87,7 +87,7 @@ a, a:hover{
 }
 
 .btn-look:active{
-  outline-color: chartreuse;
+  outline-color: aliceblue;
 }
 
 .tracks{
@@ -98,11 +98,16 @@ a, a:hover{
 
 .track{
   padding: 8px 5px;
-  border-bottom: solid 1px chartreuse;
+  border-bottom: solid 1px aliceblue;
+  color: aliceblue;
 }
 
-.trackHighlight{
-  background-color: chartreuse;
+.track i{
+  float: right;
+}
+
+.track:hover{
+  background-color: aliceblue;
   color: #333;
 }
 
@@ -110,24 +115,27 @@ a, a:hover{
   border-bottom: none;
 }
 
+.play-container{
+  margin-top: 70px;
+}
+
+.btn-control{
+  border: none;
+  color: aliceblue;
+  background-color: #333;
+}
+
+.btn-control:hover, .btn-control:active, .btn-control:focus, .btn-control:visited{
+  color: aliceblue;
+  outline: none !important;
+}
+
+.btn-control:active{
+  transform: scale(0.9);
+}
+
 #examineHeader{
   margin-top: 15px;
   margin-bottom: 30px;
-}
-
-.danceNumber{
-  color: magenta;
-}
-
-.energyNumber{
-  color: orangered;
-}
-
-.valenceNumber{
-  color: lawngreen;
-}
-
-.danceNumber, .energyNumber, .valenceNumber{
-  margin: 0 5px;
-  text-shadow: 1px 1px #333;
+  color: aliceblue;
 }

@@ -157,6 +157,8 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     ec.trackCount++;
     if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
       ec.playTrack(ec.trackCount);
+    } else {
+      socket.emit('stop');
     }
   });
 

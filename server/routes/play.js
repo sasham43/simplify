@@ -64,6 +64,8 @@ router.post('/track', function(req, res){
 io.on('connection', function(socket){
   console.log('socket connected');
   socket.emit('socket connected');
+
+  // play track
   socket.on('play track', function(data){
     console.log('play track');
     var track = spotify.createFromLink(data.track_link);
@@ -75,6 +77,10 @@ io.on('connection', function(socket){
         console.log('track finished.');
       }
     });
+  });
+
+  socket.on('stop', function(data){
+    player.stop();
   });
 });
 
