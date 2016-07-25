@@ -87,7 +87,7 @@ router.get('/albums/update', function(req, res){
           console.log('Error connecting to db to store albums.');
         } else {
           // build query string
-          var queryString = 'INSERT INTO albums (id, artist_name, image_small, image_medium, image_large, name, release_date, popularity) VALUES ';
+          var queryString = 'INSERT INTO albums (id, artist_name, image_small, image_medium, image_large, name, release_date, popularity, link) VALUES ';
           var filteredAlbums = [];
 
           body.items.map(function(album, index){
@@ -96,7 +96,7 @@ router.get('/albums/update', function(req, res){
             var albumName = album.album.name.replace(re, "''");
             var artistName = album.album.artists[0].name.replace(re, "''");
 
-            queryString += `( \'${album.album.id}\', \'${artistName}\', \'${album.album.images[2].url}\', \'${album.album.images[1].url}\', \'${album.album.images[0].url}\', \'${albumName}\', ${album.album.release_date}, ${album.album.popularity})`;
+            queryString += `( \'${album.album.id}\', \'${artistName}\', \'${album.album.images[2].url}\', \'${album.album.images[1].url}\', \'${album.album.images[0].url}\', \'${albumName}\', ${album.album.release_date}, ${album.album.popularity}, \'${album.album.uri}\')`;
             if(index === body.items.length - 1){
               queryString += ' ON CONFLICT DO NOTHING;';
             } else {
@@ -104,7 +104,7 @@ router.get('/albums/update', function(req, res){
             }
           });
 
-          //console.log('queryString:', queryString);
+          console.log('queryString:', queryString);
 
           var query = client.query(queryString);
 
@@ -130,7 +130,7 @@ router.get('/albums/update', function(req, res){
           if(err){
             console.log('Error connecting to database:', err);
           } else {
-            var queryString = 'INSERT INTO tracks (id, album_id, artist_name, name, track_number, duration_ms) VALUES ';
+            var queryString = 'INSERT INTO tracks (track_id, album_id, artist_name, track_name, track_number, duration_ms, track_link) VALUES ';
 
             // build query string
             albums.map(function(album, index){
@@ -140,7 +140,7 @@ router.get('/albums/update', function(req, res){
                 var artistName = album.album.artists[0].name.replace(re, "''");
                 var trackName = track.name.replace(re, "''");
 
-                queryString += `(\'${track.id}\', \'${album.album.id}\', \'${artistName}\', \'${trackName}\', ${track.track_number}, ${track.duration_ms})`;
+                queryString += `(\'${track.id}\', \'${album.album.id}\', \'${artistName}\', \'${trackName}\', ${track.track_number}, ${track.duration_ms}, \'${track.uri}\')`;
                 if(ti === album.album.tracks.items.length - 1){
                   queryString += '';
                 } else {
@@ -215,7 +215,7 @@ router.post('/album-features', function(req, res){
   };
 
   request.get(options, function(err, response, body){
-     console.log('album features body:', body, options);
+     //console.log('album features body:', body, options);
     // body.audio_features.map(function(feature){
     //
     //   for (num in feature){
@@ -274,6 +274,7 @@ function getAlbumsWithTracks(res, local){
         tempAlbum.image_medium = row.image_medium;
         tempAlbum.image_large = row.image_large;
         tempAlbum.artist_name = row.artist_name;
+        tempAlbum.link = row.link;
         tempAlbum.tracks.push(row);
       });
 
@@ -377,7 +378,7 @@ function filterAudioFeatures(body, tracks){
       }
     });
   });
-console.log('tracks:', tracks);
+  //console.log('tracks:', tracks);
   return tracks;
 }
 

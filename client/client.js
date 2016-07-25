@@ -130,6 +130,14 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     AlbumFactory.analyzeAlbum(tracks);
   };
 
+  ec.playAlbum = function(album){
+    AlbumFactory.playAlbum(album);
+  };
+
+  ec.playTrack = function(track){
+    AlbumFactory.playTrack(track);
+  };
+
   //AlbumFactory.analyzeAlbum(ec.currentAlbum.tracks);
 
   console.log('examine controller loaded.', ec.currentAlbum);
@@ -170,9 +178,9 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     $http.post('/spotify/album-features', album.tracks).then(function(response){
       console.log('album features response:', response.data);
       currentAlbum.album = album;
-      console.log('currentAlbum:', currentAlbum);
+      //console.log('currentAlbum:', currentAlbum);
       currentAlbum.album.tracks = response.data;
-      console.log('currentAlbum2:', currentAlbum);
+      //console.log('currentAlbum2:', currentAlbum);
     });
   };
 
@@ -190,6 +198,32 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     });
   };
 
+  var playAlbum = function(album){
+    // $http.get('/play/album' + album.link).then(function(response){
+    //   console.log('playing album.');
+    // });
+    var track = 0;
+    var playTrack = function(){
+      $http.post('/play/track/',  album.tracks[track]).then(function(response){
+        console.log('track ended?', response.data);
+        if(response.data.message === 'track playing'){
+          console.log('playing:', album.tracks[track].track_name);
+        } else if (response.data.message === 'track finished'){
+          console.log('track ended.');
+          playTrack();
+        }
+
+      });
+    };
+    playTrack();
+  };
+
+  var playTrack = function(track){
+    $http.get('/play/track/' + track.track_link).then(function(response){
+
+    });
+  };
+
 
 
   return {
@@ -201,7 +235,9 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     features: features,
     analyzeAlbum: analyzeAlbum,
     albumFeatures: albumFeatures,
-    getAlbums: getAlbums
+    getAlbums: getAlbums,
+    playAlbum: playAlbum,
+    playTrack: playTrack
   }
 }]);
 
