@@ -97,8 +97,13 @@ a, a:hover{
 }
 
 .track{
-  padding: 8px 0;
+  padding: 8px 5px;
   border-bottom: solid 1px chartreuse;
+}
+
+.trackHighlight{
+  background-color: chartreuse;
+  color: #333;
 }
 
 .track:nth-last-child(1){

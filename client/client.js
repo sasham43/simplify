@@ -174,6 +174,13 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     ec.playTrack(ec.trackCount);
   };
 
+  ec.trackHighlight = function(index){
+    // console.log(index, trackNumber);
+    if(index == ec.trackCount){
+      return {'background-color':'chartreuse', color: '#333'};
+    }
+  };
+
   //AlbumFactory.analyzeAlbum(ec.currentAlbum.tracks);
 
   console.log('examine controller loaded.', ec.currentAlbum);

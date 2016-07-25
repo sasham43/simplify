@@ -7,7 +7,7 @@
   </div>
   <div class="row">
     <div class="tracks col-md-4">
-      <div class="track" ng-repeat="track in ec.currentAlbum.tracks">
+      <div class="track" ng-repeat="track in ec.currentAlbum.tracks" ng-class="{trackHighlight: $index == ec.trackCount}">
         {{$index+1}} {{track.track_name}}
       </div>
     </div>
