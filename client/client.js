@@ -1,5 +1,7 @@
 angular.module('simplifyApp', ['ngRoute']);
 
+var socket = io();
+
 angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider){
   // fill in route info
   $routeProvider
@@ -101,6 +103,7 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 
   // examine album
   ac.examineAlbum = function(album){
+    socket.emit('examine album', {album: album});
     AlbumFactory.examineAlbum(album);
   };
 
@@ -112,15 +115,24 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$scope', function(AlbumFactory, $scope){
   var ec = this;
 
-  ec.currentAlbum = AlbumFactory.currentAlbum.album;
+  //ec.currentAlbum = AlbumFactory.currentAlbum.album;
   ec.trackCount = 0;
   ec.currentlyPlaying = false;
-
-  var socket = io();
 
   // connected socket
   socket.on('socket connected', function(data){
     console.log('socket connected');
+  });
+
+  // get album
+  socket.emit('get album');
+
+  // receive album
+  socket.on('examining album', function(data){
+    $scope.$apply(function(){
+      ec.currentAlbum = data.album;
+    });
+    console.log('examining album', ec.currentAlbum);
   });
 
   // track playing
@@ -157,8 +169,12 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     }
   });
 
-  ec.playTrack = function(trackNumber){
-    socket.emit('play track', {album: ec.currentAlbum, trackNumber: trackNumber});
+  ec.playPauseTrack = function(trackNumber){
+    if(ec.currentlyPlaying){
+      socket.emit('pause track');
+    } else {
+      socket.emit('play track', {album: ec.currentAlbum, trackNumber: trackNumber});
+    }
   };
 
   ec.prevTrack = function(){
@@ -169,10 +185,6 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   ec.nextTrack = function(){
     ec.trackCount++;
     ec.playTrack(ec.trackCount);
-  };
-
-  ec.pauseTrack = function(){
-    socket.emit('pause track');
   };
 
   ec.trackMarker = function(index){

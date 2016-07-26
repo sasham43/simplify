@@ -61,6 +61,8 @@ router.post('/track', function(req, res){
   });
 });
 
+var album = {};
+
 io.on('connection', function(socket){
   console.log('socket connected');
   socket.emit('socket connected');
@@ -68,7 +70,7 @@ io.on('connection', function(socket){
   // play track
   socket.on('play track', function(data){
     console.log('play track');
-    var album = data.album;
+    album = data.album;
     var trackNumber = data.trackNumber;
     var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
     player.play(track);
@@ -79,6 +81,17 @@ io.on('connection', function(socket){
         console.log('track finished.');
       }
     });
+  });
+
+  socket.on('examine album', function(data){
+    console.log('examining album:', data.album.name);
+      album = data.album;
+      // console.log('this is the ablum:', album);
+  });
+
+  socket.on('get album', function(data){
+    console.log('get album');
+    socket.emit('examining album', {album: album});
   });
 
   socket.on('stop track', function(data){

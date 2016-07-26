@@ -1,21 +1,27 @@
 <div class="examine">
   <div class="row text-center">
+    <!-- back button goes here -->
     <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
   </div>
   <div class="row">
     <div class="tracks col-md-4">
       <div class="track" ng-repeat="track in ec.currentAlbum.tracks" >
-        {{$index+1}} {{track.track_name}} <i ng-show="$index == ec.trackCount" class="fa fa-caret-left" aria-hidden="true"></i>
+        {{$index+1}} {{track.track_name}} <i ng-show="($index == ec.trackCount)" class="fa fa-caret-left" aria-hidden="true"></i>
       </div>
     </div>
     <div class="cover col-md-4">
       <img class="center-block" ng-src="{{ec.currentAlbum.image_medium}}" />
     </div>
     <div class="row controls col-md-4">
-      {{ec.currentlyPlaying}}
       <div class="row play-container">
-        <button ng-show="!ec.currentlyPlaying" class="btn btn-control center-block" ng-click="ec.playTrack(0)"><i class="fa fa-5x fa-play"></i></button>
-        <button ng-show="ec.currentlyPlaying" class="btn btn-control center-block" ng-click="ec.pauseTrack()"><i class="fa fa-5x fa-pause"></i></button>
+        <button class="btn btn-control center-block" ng-click="ec.playPauseTrack(0)">
+          <span class="fa-stack fa-4x">
+             <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="fa fa-circle-o-notch fa-stack-2x"></i><span class="sr-only">playing...</span>
+             <i ng-show="!ec.currentlyPlaying" class="fa fa-play fa-stack-1x"></i>
+             <i ng-show="ec.currentlyPlaying" class="fa fa-pause fa-stack-1x"></i>
+           </span>
+        </button>
+        <!-- <button class="btn btn-control center-block" ng-click="ec.pauseTrack()"></button> -->
       </div>
 
       <div class="row">
