@@ -12,8 +12,10 @@
       <img class="center-block" ng-src="{{ec.currentAlbum.image_medium}}" />
     </div>
     <div class="row controls col-md-4">
+      {{ec.currentlyPlaying}}
       <div class="row play-container">
-        <button class="btn btn-control  center-block" ng-click="ec.playTrack(0)"><i class="fa fa-5x fa-play"></i></button>
+        <button ng-show="!ec.currentlyPlaying" class="btn btn-control center-block" ng-click="ec.playTrack(0)"><i class="fa fa-5x fa-play"></i></button>
+        <button ng-show="ec.currentlyPlaying" class="btn btn-control center-block" ng-click="ec.pauseTrack()"><i class="fa fa-5x fa-pause"></i></button>
       </div>
 
       <div class="row">

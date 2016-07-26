@@ -68,7 +68,9 @@ io.on('connection', function(socket){
   // play track
   socket.on('play track', function(data){
     console.log('play track');
-    var track = spotify.createFromLink(data.track_link);
+    var album = data.album;
+    var trackNumber = data.trackNumber;
+    var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
     player.play(track);
     socket.emit('track playing', track);
     player.on({
@@ -79,8 +81,14 @@ io.on('connection', function(socket){
     });
   });
 
-  socket.on('stop', function(data){
+  socket.on('stop track', function(data){
     player.stop();
+  });
+
+  socket.on('pause track', function(data){
+    player.pause();
+    console.log('track paused');
+    socket.emit('track paused');
   });
 });
 

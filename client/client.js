@@ -49,7 +49,7 @@ angular.module('simplifyApp').controller('IndexController',['$http', '$location'
 
   ic.checkLocation();
 
-  console.log('Index controller loaded.', $location.url());
+  // console.log('Index controller loaded.', $location.url());
 }]);
 
 angular.module('simplifyApp').controller('SplashController',['$http', '$location', function($http, $location){
@@ -59,14 +59,14 @@ angular.module('simplifyApp').controller('SplashController',['$http', '$location
 
 angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory', 'AlbumFactory', function(UserTrackFactory, AlbumFactory){
   var ac = this;
-  console.log('albums here?', ac.albums);
+  // console.log('albums here?', ac.albums);
 
   ac.user = {};
   ac.albums = AlbumFactory.albums;
 
   UserTrackFactory.getUserInfo().then(function(response){
     ac.user = response.data;
-    console.log('User info:', ac.user);
+    // console.log('User info:', ac.user);
   });
 
   // start spin
@@ -106,64 +106,59 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 
   ac.getAlbums(ac.stopSpin);
 
-  console.log('albums controller loaded.', ac.albums);
+  console.log('albums controller loaded.');
 }]);
 
-angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', function(AlbumFactory){
+angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$scope', function(AlbumFactory, $scope){
   var ec = this;
 
   ec.currentAlbum = AlbumFactory.currentAlbum.album;
-
-  // ec.trackStyles = {
-  //   height: (600 / ec.currentAlbum.tracks.length) + 'px'
-  // };
-
-  // hover states
-  ec.showAlbumOverlay = function(){
-    ec.showOverlay = true;
-  };
-  ec.hideAlbumOverlay = function(){
-    ec.showOverlay = false;
-  };
-
-  // analyze tracks
-  ec.analyzeTrack = function(track){
-    AlbumFactory.analyzeTrack(track);
-  };
-
-  // analyze whole album
-  ec.analyzeAlbum = function(tracks){
-    AlbumFactory.analyzeAlbum(tracks);
-  };
-
-  // ec.playAlbum = function(album){
-  //   AlbumFactory.playAlbum(album);
-  // };
-  //
-  // ec.playTrack = function(track){
-  //   AlbumFactory.playTrack(track);
-  // };
-
   ec.trackCount = 0;
+  ec.currentlyPlaying = false;
+
   var socket = io();
-  socket.on('track playing', function(data){
-    console.log('playing track:', data.name);
-  });
+
+  // connected socket
   socket.on('socket connected', function(data){
     console.log('socket connected');
   });
+
+  // track playing
+  socket.on('track playing', function(data){
+    console.log('playing track:', data.name);
+    $scope.$apply(function(){
+      ec.currentlyPlaying = true;
+    });
+    // ec.currentlyPlaying = true;
+    console.log('ec.currentlyPlaying', ec.currentlyPlaying);
+  });
+
+  // track paused
+  socket.on('track paused', function(data){
+    $scope.$apply(function(){
+      ec.currentlyPlaying = false;
+    });
+    console.log('track paused', ec.currentlyPlaying);
+  });
+
+  // track finished
   socket.on('track finished', function(data){
     console.log('track finished');
-    ec.trackCount++;
+    $scope.$apply(function(){
+      ec.trackCount++;
+    });
+
     if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
       ec.playTrack(ec.trackCount);
+      //ec.trackHighlight(ec.trackCount);
     } else {
-      socket.emit('stop');
+      socket.emit('stop track');
+      //ec.trackMarker(0);
     }
   });
 
   ec.playTrack = function(trackNumber){
-    socket.emit('play track', ec.currentAlbum.tracks[trackNumber]);
+    socket.emit('play track', {album: ec.currentAlbum, trackNumber: trackNumber});
   };
 
   ec.prevTrack = function(){
@@ -176,16 +171,20 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
     ec.playTrack(ec.trackCount);
   };
 
-  ec.trackHighlight = function(index){
+  ec.pauseTrack = function(){
+    socket.emit('pause track');
+  };
+
+  ec.trackMarker = function(index){
     // console.log(index, trackNumber);
     if(index == ec.trackCount){
-      return {'background-color':'chartreuse', color: '#333'};
+      return true;
+    } else {
+      return false;
     }
   };
 
-  //AlbumFactory.analyzeAlbum(ec.currentAlbum.tracks);
-
-  console.log('examine controller loaded.', ec.currentAlbum);
+  // console.log('examine controller loaded.', ec.currentAlbum);
 }]);
 
 
@@ -194,9 +193,6 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', fu
 angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', function($http, $location){
   var albums = [];
   var currentAlbum = {album:{}};
-  var features = {features:{}};
-  var albumFeatures = {};
-  //var storedAlbums = [];
 
   var getAlbums = function(stopSpin){
     $http.get('/spotify/albums/stored').then(function(response){
@@ -220,27 +216,13 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     $location.url('/album');
     currentAlbum.album = album;
     console.log('examining album:', album);
-    $http.post('/spotify/album-features', album.tracks).then(function(response){
-      console.log('album features response:', response.data);
-      currentAlbum.album = album;
-      //console.log('currentAlbum:', currentAlbum);
-      currentAlbum.album.tracks = response.data;
-      //console.log('currentAlbum2:', currentAlbum);
-    });
-  };
-
-  var analyzeTrack = function(track){
-    $http.get('/spotify/track-features/' + track.id).then(function(response){
-      console.log('track feature response:', response.data);
-      features.features = response.data;
-    });
-  };
-
-  var analyzeAlbum = function(tracks){
-    $http.post('/spotify/album-features', tracks).then(function(response){
-      console.log('album features response:', response.data);
-      albumFeatures.features = response.data;
-    });
+    // $http.post('/spotify/album-features', album.tracks).then(function(response){
+    //   console.log('album features response:', response.data);
+    //   currentAlbum.album = album;
+    //   //console.log('currentAlbum:', currentAlbum);
+    //   currentAlbum.album.tracks = response.data;
+    //   //console.log('currentAlbum2:', currentAlbum);
+    // });
   };
 
   var playAlbum = function(album){
@@ -276,10 +258,6 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     examineAlbum: examineAlbum,
     updateAlbums: updateAlbums,
     albums: albums,
-    analyzeTrack: analyzeTrack,
-    features: features,
-    analyzeAlbum: analyzeAlbum,
-    albumFeatures: albumFeatures,
     getAlbums: getAlbums,
     playAlbum: playAlbum,
     playTrack: playTrack
