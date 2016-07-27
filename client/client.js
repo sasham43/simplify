@@ -163,7 +163,7 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     });
 
     if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
-      ec.playPauseTrack(ec.trackCount);
+      ec.playTrack(ec.trackCount);
       //ec.trackHighlight(ec.trackCount);
     } else {
       socket.emit('stop track');

@@ -109,6 +109,7 @@ a, a:hover{
 .track:hover{
   background-color: aliceblue;
   color: #333;
+  cursor: pointer;
 }
 
 .track:nth-last-child(1){
