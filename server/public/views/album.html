@@ -16,17 +16,25 @@
       <div class="row play-container">
         <button class="btn btn-control center-block" ng-click="ec.playPauseTrack(0)">
           <span class="fa-stack fa-4x">
-             <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="fa fa-circle-o-notch fa-stack-2x"></i><span class="sr-only">playing...</span>
-             <i ng-show="!ec.currentlyPlaying" class="fa fa-play fa-stack-1x"></i>
-             <i ng-show="ec.currentlyPlaying" class="fa fa-pause fa-stack-1x"></i>
+             <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="play-circle fa-stack-2x"></i><span class="sr-only">playing...</span>
+             <!-- <i ng-show="!ec.currentlyPlaying" class="fa fa-play fa-stack-1x"></i>
+             <i ng-show="ec.currentlyPlaying" class="fa fa-pause fa-stack-1x"></i> -->
+             <span ng-show="!ec.currentlyPlaying">></span>
+             <span ng-show="ec.currentlyPlaying">||</span>
            </span>
         </button>
         <!-- <button class="btn btn-control center-block" ng-click="ec.pauseTrack()"></button> -->
       </div>
 
       <div class="row">
-        <button class="btn btn-control col-md-6" ng-click="ec.prevTrack()"><i class="fa fa-2x fa-fast-backward"></i></button>
-        <button class="btn btn-control col-md-6" ng-click="ec.nextTrack()"><i class="fa fa-2x fa-fast-forward"></i></button>
+        <button class="btn btn-control col-md-6" ng-click="ec.prevTrack()">
+          <!-- <i class="fa fa-2x fa-fast-backward"></i> -->
+          <<
+        </button>
+        <button class="btn btn-control col-md-6" ng-click="ec.nextTrack()">
+          <!-- <i class="fa fa-2x fa-fast-forward"></i> -->
+          >>
+        </button>
       </div>
 
     </div>

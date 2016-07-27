@@ -150,6 +150,15 @@ a:hover{
   margin-bottom: 35px;
 }
 
+.play-circle{
+  border: .05em solid aliceblue;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
 .btn-control{
   border: none;
   color: aliceblue;
