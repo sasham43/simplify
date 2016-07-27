@@ -85,8 +85,8 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 
   ac.stopSpin = function(){
     ac.spinning = false;
-    $location.hash('album79');
-    console.log('spin spotted');
+    // $location.hash('album79');
+    // console.log('spin spotted');
   };
 
   ac.updateAlbums = function(){
@@ -301,3 +301,4 @@ angular.module('simplifyApp').factory('UserTrackFactory', ['$http', function($ht
     getUserInfo: getUserInfo
   }
 }]);
+//

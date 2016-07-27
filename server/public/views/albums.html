@@ -1,5 +1,4 @@
 <div class="home">
-  <a href="#album79">album 79</a>
   <h2 class="text-center">albums</h2>
 
   <div class="spinner center-block text-center" ng-show="hc.spinning">
@@ -9,7 +8,7 @@
 
   <div class="albums">
     <div id="album{{$index}}" class="album col-sm-5 col-sm-offset-1 col-md-4 center-block" ng-repeat="album in ac.albums">
-      <div class="overlayContainer center-block" ng-mouseover="ac.showAlbumOverlay(album)" ng-mouseleave="ac.hideAlbumOverlay(album)">
+      <div ng-click="ac.examineAlbum(album)" class="overlayContainer center-block" ng-mouseover="ac.showAlbumOverlay(album)" ng-mouseleave="ac.hideAlbumOverlay(album)">
         <img class="cover " ng-src="{{album.image_medium}}" />
         <div class="overlay" ng-show="album.show">
           <button ng-click="ac.examineAlbum(album)" class="btn btn-look center-block">look</button>

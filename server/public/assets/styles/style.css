@@ -4,28 +4,29 @@ body{
   background-color: #333;
   color: aliceblue;
   font-family: Josefin Sans, Helvetica, Arial, sans-serif;
+  padding-bottom: 10px;
 }
 
 a{
   color: inherit;
 }
 
-.btn-nav{
+.btn-nav, .btn-default, .btn-back{
+  background-color: #333;
   color: aliceblue;
   font-weight: bold;
   padding: 5px 0;
-  border-color: aliceblue;
-  /*margin: 10px;*/
+  /*border-color: aliceblue;*/
   padding: 5px;
-  /*border-style: double;*/
-  border-width: 1px;
-  border-color: aliceblue;
+  /*border-width: 1px;
+  border-color: aliceblue;*/
   box-shadow:
     0 0 0 1px aliceblue,
     0 0 0 4px #333,
     0 0 0 5px aliceblue;
   border-radius: 40px;
   text-align: center;
+  border: none;
 }
 
 a:hover{
@@ -40,19 +41,6 @@ a:hover{
   background-color: aliceblue;
 }
 
-.btn-default{
-  color: aliceblue;
-  background-color: #333;
-  border-color: aliceblue;
-}
-
-.btn-default:hover, .btn-default:active, .btn-default:focus{
-  color: #333;
-  background-color: aliceblue;
-  border-color: #333;
-  outline-color: invert;
-}
-
 .jumbotron{
   background-color: #333;
   color: aliceblue;
@@ -64,8 +52,9 @@ a:hover{
   font-size: 25px;
 }
 
-.startBtn{
+.btn-start{
   margin-top: 10vh;
+  width: 10vw;
 }
 
 .go{
@@ -104,12 +93,30 @@ a:hover{
 .btn-look{
   color: #333;
   margin-top: 118px;
-  border-color: #333;
+  /*border-color: #333;*/
   background-color: rgba(250, 250, 250, 0.6);
+  box-shadow:
+    0 0 0 1px #333,
+    0 0 0 4px rgba(250, 250, 250, 0.6),
+    0 0 0 5px #333;
+}
+
+.btn-look:hover{
+  color: rgba(250, 250, 250, 0.6);
+  background-color: #333;
 }
 
 .btn-look:active{
   outline-color: aliceblue;
+}
+
+.btn-back{
+
+}
+
+.btn-back:hover{
+  background-color: aliceblue;
+  color: #333;
 }
 
 .tracks{
