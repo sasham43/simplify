@@ -1,22 +1,43 @@
+@import 'https://fonts.googleapis.com/css?family=Josefin+Sans';
+
 body{
   background-color: #333;
   color: aliceblue;
+  font-family: Josefin Sans, Helvetica, Arial, sans-serif;
 }
 
-a, a:hover{
+a{
   color: inherit;
 }
 
-.nav a{
-  color: #333;
+.btn-nav{
+  color: aliceblue;
   font-weight: bold;
   padding: 5px 0;
+  border-color: aliceblue;
+  /*margin: 10px;*/
+  padding: 5px;
+  /*border-style: double;*/
+  border-width: 1px;
+  border-color: aliceblue;
+  box-shadow:
+    0 0 0 1px aliceblue,
+    0 0 0 4px #333,
+    0 0 0 5px aliceblue;
+  border-radius: 40px;
+  text-align: center;
 }
 
-.nav a:hover, .nav a:focus, .nav a:visited{
-  border: solid 1px #333;
+a:hover{
+  color: #333;
+}
+
+.nav a:hover{
+  /*border: solid 1px #333;*/
   text-decoration: none;
-  padding-right: 0; !important
+  /*padding-right: 0; !important*/
+  color: #333;
+  background-color: aliceblue;
 }
 
 .btn-default{
@@ -33,8 +54,9 @@ a, a:hover{
 }
 
 .jumbotron{
-  background-color: aliceblue;
-  color: #333;
+  background-color: #333;
+  color: aliceblue;
+  border: solid 5px aliceblue;
 }
 
 .splash{
