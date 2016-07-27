@@ -1,11 +1,11 @@
 <div class="examine">
+  <a class="col-md-1" href="/albums"><i class="fa-angle-double-left fa fa-2x"></i></a><span class="sr-only">back</span>
   <div class="row text-center">
-    <!-- back button goes here -->
     <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
   </div>
   <div class="row">
     <div class="tracks col-md-4">
-      <div class="track" ng-repeat="track in ec.currentAlbum.tracks" >
+      <div ng-click="ec.playTrack($index)" class="track" ng-repeat="track in ec.currentAlbum.tracks">
         {{$index+1}} {{track.track_name}} <i ng-show="($index == ec.trackCount)" class="fa fa-caret-left" aria-hidden="true"></i>
       </div>
     </div>

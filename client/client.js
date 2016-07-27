@@ -59,7 +59,7 @@ angular.module('simplifyApp').controller('SplashController',['$http', '$location
   console.log('Splash controller loaded.', $location.url());
 }]);
 
-angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory', 'AlbumFactory', function(UserTrackFactory, AlbumFactory){
+angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory', 'AlbumFactory', '$location', function(UserTrackFactory, AlbumFactory, $location){
   var ac = this;
   // console.log('albums here?', ac.albums);
 
@@ -85,6 +85,8 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 
   ac.stopSpin = function(){
     ac.spinning = false;
+    $location.hash('album79');
+    console.log('spin spotted');
   };
 
   ac.updateAlbums = function(){
@@ -161,7 +163,7 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     });
 
     if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
-      ec.playTrack(ec.trackCount);
+      ec.playPauseTrack(ec.trackCount);
       //ec.trackHighlight(ec.trackCount);
     } else {
       socket.emit('stop track');
@@ -169,12 +171,23 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     }
   });
 
+  ec.playTrack = function(trackNumber){
+    socket.emit('play track', {album: ec.currentAlbum, trackNumber: trackNumber});
+    // $scope.$apply(function(){
+      ec.trackCount = trackNumber;
+    // })
+  };
+
+  ec.pauseTrack = function(){
+    socket.emit('pause track');
+  };
+
   ec.playPauseTrack = function(trackNumber){
-    if(ec.currentlyPlaying){
-      socket.emit('pause track');
-    } else {
-      socket.emit('play track', {album: ec.currentAlbum, trackNumber: trackNumber});
-    }
+      if(ec.currentlyPlaying){
+        ec.pauseTrack();
+      } else {
+        ec.playTrack(trackNumber);
+      }
   };
 
   ec.prevTrack = function(){
