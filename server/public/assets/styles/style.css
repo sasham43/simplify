@@ -5,13 +5,14 @@ body{
   color: aliceblue;
   font-family: Josefin Sans, Helvetica, Arial, sans-serif;
   padding-bottom: 10px;
+  font-size: 16px;
 }
 
 a{
   color: inherit;
 }
 
-.btn-nav, .btn-default, #btn-back{
+.btn-nav, .btn-default, .btn-back{
   background-color: #333;
   color: aliceblue;
   font-weight: bold;
@@ -116,11 +117,17 @@ a:hover{
   outline-color: aliceblue;
 }
 
-#btn-back{
- width: 3em;
+@media (max-width: 768px) {
+  .btn-back{
+   width: 5em;
+  }
 }
 
-#btn-back:hover{
+.btn-back{
+ width: 5em;
+}
+
+.btn-back:hover{
   background-color: aliceblue;
   color: #333;
 }
