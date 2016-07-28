@@ -1,8 +1,9 @@
 <div class="examine">
-  <a class="col-md-1 btn-back" href="/albums"><i class="fa-angle-double-left fa fa-2x"></i></a><span class="sr-only">back</span>
+  <a class="col-md-1 btn-back" href="/albums">< back</a><span class="sr-only">back</span>
   <div class=" text-center">
     <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
   </div>
+
   <div class="row">
     <div class="row controls col-md-4">
       <div class="row play-container">
@@ -37,7 +38,7 @@
 
     <div class="tracks col-md-4">
       <div ng-click="ec.playTrack($index)" class="track" ng-repeat="track in ec.currentAlbum.tracks">
-        {{$index+1}} {{track.track_name}} <i ng-show="($index == ec.trackCount)" class="fa fa-caret-left" aria-hidden="true"></i>
+        {{$index+1}} {{track.track_name}} <span ng-show="($index == ec.trackCount)" class="track-marker" aria-hidden="true"><</span>
       </div>
     </div>
 

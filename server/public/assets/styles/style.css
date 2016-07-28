@@ -99,6 +99,10 @@ a:hover{
   margin: 25px 0;
 }
 
+.filter{
+  padding-top: 3px;
+}
+
 .overlay{
   background-color: rgba(250, 250, 250, 0.6);
   width: 300px;
@@ -150,6 +154,7 @@ a:hover{
 
 .btn-back{
  width: 5em;
+ margin-left: 5px;
 }
 
 .btn-back:hover{
@@ -169,8 +174,12 @@ a:hover{
   color: aliceblue;
 }
 
-.track i{
+.track-marker{
   float: right;
+}
+
+.track-marker:hover{
+  text-decoration: none;
 }
 
 .track:hover{
