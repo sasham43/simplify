@@ -94,9 +94,6 @@ function createAlbumsTable(callback){
       'link varchar(80),' +
       'duration_ms int,' +
       'release_date text,' + // this is getting borked, it's doing math instead of treating it like a string
-      'avg_danceability int,' +
-      'avg_energy int,' +
-      'avg_valence int,' +
       'popularity int' +
       ')');
 
@@ -130,16 +127,7 @@ function createTracksTable(callback){
       'track_name text,' +
       'track_number int,' +
       'track_link text,' +
-      'danceability int,' +
       'duration_ms int,' +
-      'key int,' +
-      'loudness int,' +
-      'speechiness int,' +
-      'liveness int,' +
-      'tempo int,' +
-      'time_signature int,' +
-      'energy int,' +
-      'valence int,' +
       'popularity int' +
       ')');
 

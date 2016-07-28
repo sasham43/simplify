@@ -12,6 +12,22 @@ a{
   color: inherit;
 }
 
+input{
+  background-color: #333;
+  border-radius: 40px;
+  border-width: 0px;
+  color: aliceblue;
+  box-shadow:
+    0 0 0 1px aliceblue,
+    0 0 0 4px #333,
+    0 0 0 5px aliceblue;
+  padding-left: 15px;
+}
+
+input:focus{
+  outline: none;
+}
+
 .btn-nav, .btn-default, .btn-back{
   background-color: #333;
   color: aliceblue;
@@ -93,8 +109,17 @@ a:hover{
   transition: 0.1s all ease-in;
 }
 
-.overlayContainer{
+.overlay-container{
   width: 300px;
+}
+
+.overlay-container:hover{
+  box-shadow:
+    0 0 0 3px #333,
+    0 0 0 4px aliceblue,
+    0 0 0 8px #333,
+    0 0 0 9px aliceblue;
+    cursor: pointer;
 }
 
 .btn-look{

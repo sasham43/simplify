@@ -77,7 +77,10 @@ router.get('/albums/update', function(req, res){
   // recursively get all of a users' saved albums
   var pages = 0;
   var getAlbums = function(err, response, body){
-    console.log('Getting page', pages);
+    if(err){
+      console.log('Error getting albums.');
+    }
+    console.log('Getting page', pages, body);
     if(body.items){
       body.items.map(function(album){
         albums.push(album);
@@ -175,6 +178,9 @@ router.get('/albums/update', function(req, res){
         console.log('got albums.');
         res.send({albums:albums});
       }
+    } else if(body.error) {
+      console.log('Error.');
+      res.send(body);
     }
     pages++;
   };

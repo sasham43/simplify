@@ -1,5 +1,8 @@
 <div class="home">
   <h2 class="text-center">albums</h2>
+  <div class="row settings">
+    <input class="filter col-md-2 col-md-offset-1" type="text" ng-model="ac.filterText" placeholder="filter..." />    
+  </div>
 
   <div class="spinner center-block text-center" ng-show="hc.spinning">
     <i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i>
@@ -7,12 +10,12 @@
   </div>
 
   <div class="albums">
-    <div id="album{{$index}}" class="album col-sm-5 col-sm-offset-1 col-md-4 center-block" ng-repeat="album in ac.albums">
-      <div ng-click="ac.examineAlbum(album)" class="overlayContainer center-block" ng-mouseover="ac.showAlbumOverlay(album)" ng-mouseleave="ac.hideAlbumOverlay(album)">
+    <div id="album{{$index}}" class="album col-sm-5 col-sm-offset-1 col-md-4 center-block" ng-repeat="album in ac.albums | filter: {$: ac.filterText}">
+      <div ng-click="ac.examineAlbum(album)" class="overlay-container center-block" ng-mouseover="" ng-mouseleave="ac.hideAlbumOverlay(album)">
         <img class="cover " ng-src="{{album.image_medium}}" />
-        <div class="overlay" ng-show="album.show">
+        <!-- <div class="overlay" ng-show="album.show">
           <button ng-click="ac.examineAlbum(album)" class="btn btn-look center-block">look</button>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

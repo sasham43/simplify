@@ -96,12 +96,12 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 
 
   // hover states
-  ac.showAlbumOverlay = function(album){
-    album.show = true;
-  };
-  ac.hideAlbumOverlay = function(album){
-    album.show = false;
-  };
+  // ac.showAlbumOverlay = function(album){
+  //   album.show = true;
+  // };
+  // ac.hideAlbumOverlay = function(album){
+  //   album.show = false;
+  // };
 
   // examine album
   ac.examineAlbum = function(album){
