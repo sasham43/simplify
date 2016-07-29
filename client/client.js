@@ -71,13 +71,6 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
     // console.log('User info:', ac.user);
   });
 
-  // start spin
-//  hc.spinning = true;
-
-  // if(hc.albums.length <= 0){
-  //   AlbumFactory.updateAlbums();
-  // }
-
   ac.getAlbums = function(){
     ac.spinning = true;
     AlbumFactory.getAlbums(ac.stopSpin);
@@ -94,15 +87,6 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
     AlbumFactory.updateAlbums(ac.stopSpin);
   };
 
-
-  // hover states
-  // ac.showAlbumOverlay = function(album){
-  //   album.show = true;
-  // };
-  // ac.hideAlbumOverlay = function(album){
-  //   album.show = false;
-  // };
-
   // examine album
   ac.examineAlbum = function(album){
     socket.emit('examine album', {album: album});
@@ -117,7 +101,6 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
 angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$scope', function(AlbumFactory, $scope){
   var ec = this;
 
-  //ec.currentAlbum = AlbumFactory.currentAlbum.album;
   ec.trackCount = 0;
   ec.currentlyPlaying = false;
 
@@ -127,59 +110,79 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   });
 
   // get album
-  socket.emit('get album');
+  socket.emit('get status');
 
-  // receive album
-  socket.on('examining album', function(data){
+  socket.on('status', function(data){
+    switch (data.status){
+      case 'track playing':
+        $scope.$apply(function(){
+          ec.currentlyPlaying = true;
+        });
+        break;
+      case 'track paused':
+        $scope.$apply(function(){
+          ec.currentlyPlaying = false;
+        });
+        break;
+    }
     $scope.$apply(function(){
+      ec.trackCount = data.trackNumber;
       ec.currentAlbum = data.album;
     });
-    console.log('examining album', ec.currentAlbum);
+    console.log('status: ', data.status, ec.currentAlbum.tracks[ec.trackCount].track_name);
   });
+
+  // // receive album
+  // socket.on('examining album', function(data){
+  //   $scope.$apply(function(){
+  //     ec.currentAlbum = data.album;
+  //   });
+  //   console.log('examining album', ec.currentAlbum);
+  // });
 
   // track playing
-  socket.on('track playing', function(data){
-    console.log('playing track:', data.name);
-    $scope.$apply(function(){
-      ec.currentlyPlaying = true;
-    });
-    // ec.currentlyPlaying = true;
-    console.log('ec.currentlyPlaying', ec.currentlyPlaying);
-  });
+  // socket.on('track playing', function(data){
+  //   console.log('playing track:', data.name);
+  //   $scope.$apply(function(){
+  //     ec.currentlyPlaying = true;
+  //   });
+  //   // ec.currentlyPlaying = true;
+  //   console.log('ec.currentlyPlaying', ec.currentlyPlaying);
+  // });
+  //
+  // // track paused
+  // socket.on('track paused', function(data){
+  //   $scope.$apply(function(){
+  //     ec.currentlyPlaying = false;
+  //   });
+  //   console.log('track paused', ec.currentlyPlaying);
+  // });
+  //
+  // // track finished
+  // socket.on('track finished', function(data){
+  //   console.log('track finished');
+  //   $scope.$apply(function(){
+  //     ec.trackCount++;
+  //   });
+  //
+  //   if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
+  //     ec.playTrack(ec.trackCount);
+  //     //ec.trackHighlight(ec.trackCount);
+  //   } else {
+  //     socket.emit('stop track');
+  //     //ec.trackMarker(0);
+  //   }
+  // });
 
-  // track paused
-  socket.on('track paused', function(data){
-    $scope.$apply(function(){
-      ec.currentlyPlaying = false;
-    });
-    console.log('track paused', ec.currentlyPlaying);
-  });
-
-  // track finished
-  socket.on('track finished', function(data){
-    console.log('track finished');
-    $scope.$apply(function(){
-      ec.trackCount++;
-    });
-
-    if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
-      ec.playTrack(ec.trackCount);
-      //ec.trackHighlight(ec.trackCount);
-    } else {
-      socket.emit('stop track');
-      //ec.trackMarker(0);
-    }
-  });
+  // commands
 
   ec.playTrack = function(trackNumber){
-    socket.emit('play track', {album: ec.currentAlbum, trackNumber: trackNumber});
-    // $scope.$apply(function(){
-      ec.trackCount = trackNumber;
-    // })
+    socket.emit('command', {cmd: 'play', album: ec.currentAlbum, trackNumber: trackNumber});
+    //ec.trackCount = trackNumber;
   };
 
   ec.pauseTrack = function(){
-    socket.emit('pause track');
+    socket.emit('command', {cmd: 'pause'});
   };
 
   ec.playPauseTrack = function(trackNumber){
@@ -239,7 +242,8 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
 
   var examineAlbum = function(album){
     $location.url('/album');
-    currentAlbum.album = album;
+    // socket.emit('', {album: album});
+    //currentAlbum.album = album;
     console.log('examining album:', album);
     // $http.post('/spotify/album-features', album.tracks).then(function(response){
     //   console.log('album features response:', response.data);
@@ -250,31 +254,25 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     // });
   };
 
-  var playAlbum = function(album){
-    // $http.get('/play/album' + album.link).then(function(response){
-    //   console.log('playing album.');
-    // });
-    var track = 0;
-    var playTrack = function(){
-      $http.post('/play/track/',  album.tracks[track]).then(function(response){
-        console.log('track ended?', response.data);
-        if(response.data.message === 'track playing'){
-          console.log('playing:', album.tracks[track].track_name);
-        } else if (response.data.message === 'track finished'){
-          console.log('track ended.');
-          playTrack();
-        }
-
-      });
-    };
-    playTrack();
-  };
-
-  var playTrack = function(track){
-    $http.get('/play/track/' + track.track_link).then(function(response){
-
-    });
-  };
+  // var playAlbum = function(album){
+  //   // $http.get('/play/album' + album.link).then(function(response){
+  //   //   console.log('playing album.');
+  //   // });
+  //   var track = 0;
+  //   var playTrack = function(){
+  //     $http.post('/play/track/',  album.tracks[track]).then(function(response){
+  //       console.log('track ended?', response.data);
+  //       if(response.data.message === 'track playing'){
+  //         console.log('playing:', album.tracks[track].track_name);
+  //       } else if (response.data.message === 'track finished'){
+  //         console.log('track ended.');
+  //         playTrack();
+  //       }
+  //
+  //     });
+  //   };
+  //   playTrack();
+  // };
 
 
 
@@ -283,9 +281,9 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     examineAlbum: examineAlbum,
     updateAlbums: updateAlbums,
     albums: albums,
-    getAlbums: getAlbums,
-    playAlbum: playAlbum,
-    playTrack: playTrack
+    getAlbums: getAlbums
+    // playAlbum: playAlbum,
+    // playTrack: playTrack
   }
 }]);
 

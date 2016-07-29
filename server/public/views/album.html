@@ -10,22 +10,21 @@
         <button class="btn btn-control center-block" ng-click="ec.playPauseTrack(0)">
           <span class="fa-stack fa-4x">
              <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="play-circle fa-stack-2x"></i><span class="sr-only">playing...</span>
-             <!-- <i ng-show="!ec.currentlyPlaying" class="fa fa-play fa-stack-1x"></i>
-             <i ng-show="ec.currentlyPlaying" class="fa fa-pause fa-stack-1x"></i> -->
-             <span ng-show="!ec.currentlyPlaying">></span>
-             <span ng-show="ec.currentlyPlaying">||</span>
+             <span ng-show="!ec.currentlyPlaying">
+               >
+             </span>
+             <span ng-show="ec.currentlyPlaying">
+               ||
+             </span>
            </span>
         </button>
-        <!-- <button class="btn btn-control center-block" ng-click="ec.pauseTrack()"></button> -->
       </div>
 
       <div class="row">
         <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.prevTrack()">
-          <!-- <i class="fa fa-2x fa-fast-backward"></i> -->
           <<
         </button>
         <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.nextTrack()">
-          <!-- <i class="fa fa-2x fa-fast-forward"></i> -->
           >>
         </button>
       </div>
@@ -36,7 +35,7 @@
       <img class="center-block" ng-src="{{ec.currentAlbum.image_medium}}" />
     </div>
 
-    <div class="tracks col-md-4">
+    <div id="tracks" class="tracks col-md-4">
       <div ng-click="ec.playTrack($index)" class="track" ng-repeat="track in ec.currentAlbum.tracks">
         {{$index+1}} {{track.track_name}} <span ng-show="($index == ec.trackCount)" class="track-marker" aria-hidden="true"><</span>
       </div>
