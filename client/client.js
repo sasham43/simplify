@@ -173,6 +173,7 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   //     //ec.trackMarker(0);
   //   }
   // });
+  
 
   // commands
 
