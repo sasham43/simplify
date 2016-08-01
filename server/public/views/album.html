@@ -1,19 +1,43 @@
 <div class="examine">
-  <a class="col-md-1 btn-back" href="/albums">< back</a><span class="sr-only">back</span>
-  <div class=" text-center">
-    <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
+  <div class="row">
+    <a class="col-md-1 btn-back" href="/albums">< back</a><span class="sr-only">back</span>
+    <div class="col-md-6 col-md-offset-2 text-center">
+      <h2 id="examineHeader" >{{ec.currentAlbum.artist_name}} - {{ec.currentAlbum.name}}</h2>
+    </div>
+    <div class="col-md-4 controls-small" ng-show="true">
+      <button class="col-md-3 btn btn-control btn-skip-small" ng-click="ec.prevTrack()">
+        <<
+      </button>
+
+      <button class="col-md-4 btn btn-control-small btn-play-small">
+        <span class="text-center fa-stack ">
+           <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="play-circle fa-stack-2x" ></i><span class="sr-only">playing...</span>
+           <span ng-show="!ec.currentlyPlaying">
+             >
+           </span>
+           <span ng-show="ec.currentlyPlaying">
+             ||
+           </span>
+         </span>
+      </button>
+
+       <button class="col-md-4 btn btn-control btn-skip-small" ng-click="ec.nextTrack()">
+         >>
+       </button>
+    </div>
   </div>
+
 
   <div class="row">
     <div class="row controls col-md-4" ng-class="{'controls-small': ec.coverView}">
       <div class="row play-container">
         <button class="btn btn-control center-block" ng-click="ec.playPauseTrack(0)">
           <span class="fa-stack fa-4x">
-             <i ng-class="{'fa-spin': ec.currentlyPlaying, 'btn-control-small':ec.coverView}" class="play-circle fa-stack-2x" ></i><span class="sr-only">playing...</span>
-             <span ng-show="!ec.currentlyPlaying" ng-class="{'btn-control-small': ec.coverView}">
+             <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="play-circle fa-stack-2x" ></i><span class="sr-only">playing...</span>
+             <span ng-show="!ec.currentlyPlaying">
                >
              </span>
-             <span ng-show="ec.currentlyPlaying" ng-class="{'btn-control-small': ec.coverView}">
+             <span ng-show="ec.currentlyPlaying">
                ||
              </span>
            </span>
@@ -21,10 +45,10 @@
       </div>
 
       <div class="row">
-        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.prevTrack()" ng-class="{'btn-control-small': ec.coverView}">
+        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.prevTrack()">
           <<
         </button>
-        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.nextTrack()" ng-class="{'btn-control-small': ec.coverView}">
+        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.nextTrack()">
           >>
         </button>
       </div>

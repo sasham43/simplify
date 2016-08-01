@@ -169,13 +169,22 @@ a:hover{
   height: 640px;
 }
 
-.controls-small{
+/*.controls-small{
   position: absolute;
   z-index: 1;
-}
+}*/
 
 .controls-small button{
   background-color:transparent;
+}
+
+.btn-play-small, .btn-skip-small{
+  /*width: 33%;
+  display: inline-block;*/
+}
+
+.btn-play-small span{
+  /*margin-left: .5em;*/
 }
 
 .btn-back{
@@ -187,6 +196,7 @@ a:hover{
 .btn-back:hover{
   background-color: aliceblue;
   color: #333;
+  text-decoration: none;
 }
 
 .tracks{
@@ -255,7 +265,7 @@ a:hover{
 
 
 .btn-control-small{
-  font-size: .5em;
+  /*font-size: .5em;*/
   text-shadow: 3px 3px 5px #333;
 }
 
