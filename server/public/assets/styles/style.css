@@ -117,7 +117,7 @@ a:hover{
   width: 300px;
 }*/
 
-.cover:hover{
+.overlay-container:hover{
   box-shadow:
     0 0 0 3px #333,
     0 0 0 4px aliceblue,
@@ -191,7 +191,7 @@ a:hover{
 
 .tracks{
   height: 300px;
-  overflow: scroll;
+  overflow: auto;
   -webkit-mask-image: -webkit-gradient( linear, center top, center bottom, color-stop(0.00, rgba(33,33,33,1)), color-stop(0.35, rgba(33,33,33,1)), color-stop(0.50, rgba(33,33,33,1)), color-stop(0.95, rgba(33,33,33,0.9)), color-stop(1.00, rgba(0,0,0,0)));
 }
 
