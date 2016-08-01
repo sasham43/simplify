@@ -183,14 +183,12 @@ a:hover{
   display: inline-block;*/
 }
 
-.btn-play-small span{
-  /*margin-left: .5em;*/
+.btn-play-small:focus, .btn-play-small:hover{
+  color: aliceblue;
 }
 
 .btn-back{
- width: 5em;
- margin-left: 5px;
- position: absolute;
+ margin-left: 1em;
 }
 
 .btn-back:hover{
