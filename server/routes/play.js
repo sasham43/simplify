@@ -14,53 +14,6 @@ var ready = function(){
   console.log('spotify play loaded.');
 };
 
-
-// router.get('/album/:albumLink', function(req, res){
-//   var albumLink = req.params.albumLink;
-//   console.log('albumLInk:', albumLink);
-//   var album = spotify.createFromLink(albumLink);
-//   album.browse(function(err, thisAlbum){
-//   if(err){
-//     console.log('error browsing album:', err);
-//   } else {
-//     var tracks = thisAlbum.tracks;
-//     // var track = tracks[0];
-//     // spotify.player.play(track);
-//     var trackCount = 2;
-//     var playAlbum = function(){
-//       var track = tracks[trackCount];
-//       player.play(track);
-//       console.log('playing:', track.name);
-//       player.on({
-//         endOfTrack: function(){
-//         console.log('track ended.');
-//         trackCount++;
-//         playAlbum();
-//       }
-//     });
-//     };
-//     playAlbum();
-//   }
-// });
-//
-// });
-//
-// router.post('/track', function(req, res){
-//   var trackLink = req.body.track_link;
-//   //console.log('request body:', req.body);
-//
-//   var track = spotify.createFromLink(trackLink);
-//   console.log('playing:', track);
-//   player.play(track);
-//   res.send({message: 'track playing'});
-//   player.on({
-//     endOfTrack: function(){
-//       console.log('track finished.');
-//       res.send({message: 'track finished'});
-//     }
-//   });
-// });
-
 var album = {};
 var trackNumber = 0;
 var currentlyPlaying = false;
@@ -100,11 +53,16 @@ io.on('connection', function(socket){
     console.log('command:', data);
     switch(data.cmd){
       case 'play':
-        trackNumber = data.trackNumber;
-        var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
-        player.play(track);
-        currentlyPlaying = true;
-        socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+        if(player.currentSecond != 0 && trackNumber == data.trackNumber){
+          player.resume();
+          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+        } else {
+          trackNumber = data.trackNumber;
+          var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
+          player.play(track);
+          currentlyPlaying = true;
+          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+        }
         break;
       case 'pause':
         player.pause();
