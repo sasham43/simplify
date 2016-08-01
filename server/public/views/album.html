@@ -5,15 +5,15 @@
   </div>
 
   <div class="row">
-    <div class="row controls col-md-4">
+    <div class="row controls col-md-4" ng-class="{'controls-small': ec.coverView}">
       <div class="row play-container">
         <button class="btn btn-control center-block" ng-click="ec.playPauseTrack(0)">
           <span class="fa-stack fa-4x">
-             <i ng-class="{'fa-spin': ec.currentlyPlaying}" class="play-circle fa-stack-2x"></i><span class="sr-only">playing...</span>
-             <span ng-show="!ec.currentlyPlaying">
+             <i ng-class="{'fa-spin': ec.currentlyPlaying, 'btn-control-small':ec.coverView}" class="play-circle fa-stack-2x" ></i><span class="sr-only">playing...</span>
+             <span ng-show="!ec.currentlyPlaying" ng-class="{'btn-control-small': ec.coverView}">
                >
              </span>
-             <span ng-show="ec.currentlyPlaying">
+             <span ng-show="ec.currentlyPlaying" ng-class="{'btn-control-small': ec.coverView}">
                ||
              </span>
            </span>
@@ -21,21 +21,21 @@
       </div>
 
       <div class="row">
-        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.prevTrack()">
+        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.prevTrack()" ng-class="{'btn-control-small': ec.coverView}">
           <<
         </button>
-        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.nextTrack()">
+        <button class="btn btn-control btn-skip col-sm-6 col-xs-6 col-md-6" ng-click="ec.nextTrack()" ng-class="{'btn-control-small': ec.coverView}">
           >>
         </button>
       </div>
     </div>
 
 
-    <div class="cover col-md-4">
-      <img class="center-block" ng-src="{{ec.currentAlbum.image_medium}}" />
+    <div class="cover" ng-class="{'col-md-4': !ec.coverView, 'center-block': ec.coverView}">
+      <img class="cover-img center-block"  ng-class="{'cover-large':ec.coverView}" ng-src="{{ec.currentAlbum.image_large}}" ng-click="ec.switchView()" />
     </div>
 
-    <div id="tracks" class="tracks col-md-4">
+    <div id="tracks" class="tracks col-md-4" ng-show="!ec.coverView">
       <div ng-click="ec.playTrack($index)" class="track" ng-repeat="track in ec.currentAlbum.tracks">
         {{$index+1}} {{track.track_name}} <span ng-show="($index == ec.trackCount)" class="track-marker" aria-hidden="true"><</span>
       </div>

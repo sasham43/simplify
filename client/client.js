@@ -103,6 +103,7 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
 
   ec.trackCount = 0;
   ec.currentlyPlaying = false;
+  ec.coverView = false;
 
   // connected socket
   socket.on('socket connected', function(data){
@@ -173,7 +174,7 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   //     //ec.trackMarker(0);
   //   }
   // });
-  
+
 
   // commands
 
@@ -211,6 +212,17 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     } else {
       return false;
     }
+  };
+
+  ec.switchView = function(){
+    // if(ec.coverView){
+    //   ec.coverView = false;
+    //   // make small
+    // } else {
+    //   // make big
+    //   ec.coverView = true;
+    // }
+    ec.coverView = !ec.coverView;
   };
 
   // console.log('examine controller loaded.', ec.currentAlbum);
