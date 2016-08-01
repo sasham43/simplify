@@ -26,7 +26,7 @@ io.on('connection', function(socket){
     endOfTrack: function(){
       console.log('track finished');
       trackNumber++;
-      if(trackNumber <= album.tracks.length){
+      if(trackNumber < album.tracks.length){
         console.log('trackNumber:', trackNumber);
         var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
         player.play(track);

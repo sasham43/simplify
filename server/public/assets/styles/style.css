@@ -260,11 +260,11 @@ a:hover{
   transform: scale(0.9);
 }
 
-
-
 .btn-control-small{
   /*font-size: .5em;*/
   text-shadow: 3px 3px 5px #333;
+  animation-duration: 3s;
+  animation-name: slide-out;
 }
 
 #examineHeader{
@@ -276,3 +276,16 @@ a:hover{
 .fa-spin{
   animation: fa-spin 4s infinite linear;
 }
+
+ /*animations*/
+
+ @keyframes slide-out {
+   from {
+
+   }
+
+   to{
+     position:absolute;
+     left: 200vw;
+   }
+ }
