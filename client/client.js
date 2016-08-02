@@ -111,7 +111,6 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   });
 
   // get album
-  socket.emit('get status');
 
   socket.on('status', function(data){
     switch (data.status){
@@ -133,48 +132,8 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     console.log('status: ', data.status, ec.currentAlbum.tracks[ec.trackCount].track_name);
   });
 
-  // // receive album
-  // socket.on('examining album', function(data){
-  //   $scope.$apply(function(){
-  //     ec.currentAlbum = data.album;
-  //   });
-  //   console.log('examining album', ec.currentAlbum);
-  // });
 
-  // track playing
-  // socket.on('track playing', function(data){
-  //   console.log('playing track:', data.name);
-  //   $scope.$apply(function(){
-  //     ec.currentlyPlaying = true;
-  //   });
-  //   // ec.currentlyPlaying = true;
-  //   console.log('ec.currentlyPlaying', ec.currentlyPlaying);
-  // });
-  //
-  // // track paused
-  // socket.on('track paused', function(data){
-  //   $scope.$apply(function(){
-  //     ec.currentlyPlaying = false;
-  //   });
-  //   console.log('track paused', ec.currentlyPlaying);
-  // });
-  //
-  // // track finished
-  // socket.on('track finished', function(data){
-  //   console.log('track finished');
-  //   $scope.$apply(function(){
-  //     ec.trackCount++;
-  //   });
-  //
-  //   if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
-  //     ec.playTrack(ec.trackCount);
-  //     //ec.trackHighlight(ec.trackCount);
-  //   } else {
-  //     socket.emit('stop track');
-  //     //ec.trackMarker(0);
-  //   }
-  // });
-
+  socket.emit('get status');
 
   // commands
 
@@ -215,13 +174,6 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   };
 
   ec.switchView = function(){
-    // if(ec.coverView){
-    //   ec.coverView = false;
-    //   // make small
-    // } else {
-    //   // make big
-    //   ec.coverView = true;
-    // }
     ec.coverView = !ec.coverView;
   };
 

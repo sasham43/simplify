@@ -111,11 +111,11 @@ a:hover{
   top: 0;
   position: absolute;
   transition: 0.1s all ease-in;
-}
+}*/
 
 .overlay-container{
   width: 300px;
-}*/
+}
 
 .overlay-container:hover{
   box-shadow:
