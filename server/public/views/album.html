@@ -32,7 +32,7 @@
 
 
   <div class="row">
-    <div class="row controls col-md-4" ng-class="{'controls-small': ec.coverView}" ng-show="!ec.coverView">
+    <div class="row controls col-md-4" ng-show="!ec.coverView">
       <div class="row play-container">
         <button class="btn btn-control center-block" ng-click="ec.playPauseTrack(ec.trackCount)">
           <span class="fa-stack fa-4x">
@@ -59,10 +59,10 @@
 
 
     <div class="cover" ng-class="{'col-md-4': !ec.coverView, 'center-block': ec.coverView}">
-      <img class="cover-img center-block"  ng-class="{'cover-large':ec.coverView}" ng-src="{{ec.currentAlbum.image_large}}" ng-click="ec.switchView()" />
+      <img class="cover-img center-block"  ng-class="{'cover-large':ec.coverView}" ng-src="{{ec.currentAlbum.image_large}}" ng-click="ec.startAnimate()" />
     </div>
 
-    <div id="tracks" class="tracks col-md-4" ng-show="!ec.coverView">
+    <div id="tracks" class="tracks col-md-4" my-show="!ec.hideTracks" after-hide="ec.switchView()" after-show="">
       <div ng-click="ec.playTrack($index)" class="track" ng-repeat="track in ec.currentAlbum.tracks">
         {{$index+1}} {{track.track_name}} <span ng-show="($index == ec.trackCount)" class="track-marker" aria-hidden="true"><</span>
       </div>

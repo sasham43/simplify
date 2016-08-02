@@ -1,4 +1,4 @@
-angular.module('simplifyApp', ['ngRoute']);
+angular.module('simplifyApp', ['ngRoute', 'ngAnimate']);
 
 var socket = io();
 
@@ -103,15 +103,13 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
 
   ec.trackCount = 0;
   ec.currentlyPlaying = false;
+  ec.hideTracks = false;
   ec.coverView = false;
 
   // connected socket
   socket.on('socket connected', function(data){
     console.log('socket connected');
   });
-
-  // get album
-  socket.emit('get status');
 
   socket.on('status', function(data){
     switch (data.status){
@@ -133,48 +131,8 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     console.log('status: ', data.status, ec.currentAlbum.tracks[ec.trackCount].track_name);
   });
 
-  // // receive album
-  // socket.on('examining album', function(data){
-  //   $scope.$apply(function(){
-  //     ec.currentAlbum = data.album;
-  //   });
-  //   console.log('examining album', ec.currentAlbum);
-  // });
-
-  // track playing
-  // socket.on('track playing', function(data){
-  //   console.log('playing track:', data.name);
-  //   $scope.$apply(function(){
-  //     ec.currentlyPlaying = true;
-  //   });
-  //   // ec.currentlyPlaying = true;
-  //   console.log('ec.currentlyPlaying', ec.currentlyPlaying);
-  // });
-  //
-  // // track paused
-  // socket.on('track paused', function(data){
-  //   $scope.$apply(function(){
-  //     ec.currentlyPlaying = false;
-  //   });
-  //   console.log('track paused', ec.currentlyPlaying);
-  // });
-  //
-  // // track finished
-  // socket.on('track finished', function(data){
-  //   console.log('track finished');
-  //   $scope.$apply(function(){
-  //     ec.trackCount++;
-  //   });
-  //
-  //   if(ec.trackCount <= ec.currentAlbum.tracks.length - 1){
-  //     ec.playTrack(ec.trackCount);
-  //     //ec.trackHighlight(ec.trackCount);
-  //   } else {
-  //     socket.emit('stop track');
-  //     //ec.trackMarker(0);
-  //   }
-  // });
-
+    // get album
+    socket.emit('get status');
 
   // commands
 
@@ -206,7 +164,6 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   };
 
   ec.trackMarker = function(index){
-    // console.log(index, trackNumber);
     if(index == ec.trackCount){
       return true;
     } else {
@@ -215,14 +172,11 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   };
 
   ec.switchView = function(){
-    // if(ec.coverView){
-    //   ec.coverView = false;
-    //   // make small
-    // } else {
-    //   // make big
-    //   ec.coverView = true;
-    // }
     ec.coverView = !ec.coverView;
+  };
+
+  ec.startAnimate = function(){
+    ec.hideTracks = !ec.hideTracks;
   };
 
   // console.log('examine controller loaded.', ec.currentAlbum);
@@ -310,6 +264,26 @@ angular.module('simplifyApp').factory('UserTrackFactory', ['$http', function($ht
   return {
     user: user,
     getUserInfo: getUserInfo
+  }
+}]);
+
+angular.module('simplifyApp').directive('myShow', ['$animate', function($animate) {
+  return {
+    scope: {
+      'myShow': '=',
+      'afterShow': '&',
+      'afterHide': '&'
+    },
+    link: function(scope, element) {
+      scope.$watch('myShow', function(show, oldShow) {
+        if (show) {
+          $animate.removeClass(element, 'ng-hide').then(scope.afterShow);
+        }
+        if (!show) {
+          $animate.addClass(element, 'ng-hide').then(scope.afterHide);
+        }
+      });
+    }
   }
 }]);
 //

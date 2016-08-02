@@ -12,6 +12,10 @@ a, a:visited{
   color: inherit;
 }
 
+.btn:active, .btn:focus, .btn:focus:active{
+  outline: none;
+}
+
 input{
   background-color: #333;
   border-radius: 40px;
@@ -111,11 +115,11 @@ a:hover{
   top: 0;
   position: absolute;
   transition: 0.1s all ease-in;
-}
+}*/
 
 .overlay-container{
   width: 300px;
-}*/
+}
 
 .overlay-container:hover{
   box-shadow:
@@ -162,6 +166,8 @@ a:hover{
 .cover-img{
   width: 300px;
   height: 300px;
+  transition: all .6s ease-in;
+  transition-delay: 0.5s;
 }
 
 .cover-large{
@@ -169,18 +175,8 @@ a:hover{
   height: 640px;
 }
 
-/*.controls-small{
-  position: absolute;
-  z-index: 1;
-}*/
-
 .controls-small button{
   background-color:transparent;
-}
-
-.btn-play-small, .btn-skip-small{
-  /*width: 33%;
-  display: inline-block;*/
 }
 
 .btn-play-small:focus, .btn-play-small:hover{
@@ -263,9 +259,8 @@ a:hover{
 .btn-control-small{
   /*font-size: .5em;*/
   text-shadow: 3px 3px 5px #333;
-  animation-duration: 3s;
-  animation-name: slide-out;
 }
+
 
 #examineHeader{
   margin-top: 15px;
@@ -279,13 +274,48 @@ a:hover{
 
  /*animations*/
 
- @keyframes slide-out {
-   from {
+ .controls-small{
+   animation-duration: .5s;
+   animation-name: slide-out-right;
+   animation-direction: reverse;
+ }
 
+ .controls-small.ng-hide{
+   animation-duration: 1s;
+   animation-name: slide-out-right;
+   animation-direction:normal;
+ }
+
+ .tracks.ng-hide{
+   animation-duration: .5s;
+   animation-name: slide-out-right;
+   animation-direction: normal;
+ }
+
+ .tracks{
+   animation-duration: .5s;
+   animation-name: slide-in-right;
+   /*animation-direction: reverse;*/
+ }
+
+ @keyframes slide-out-right {
+   from {
+     left: 0vw;
+     position: absolute;
    }
 
    to{
-     position:absolute;
-     left: 200vw;
+     left: 35vw;
+     position: absolute;
+   }
+ }
+
+ @keyframes slide-in-right {
+   from {
+     left: 35vw;
+   }
+
+   to {
+     left: 0;
    }
  }

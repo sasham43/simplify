@@ -31,6 +31,8 @@ module.exports = function(grunt) {
             'angular/angular-csp.css',
             'angular-route/angular-route.min.js',
             'angular-route/angular-route.min.js.map',
+            'angular-animate/angular-animate.min.js',
+            'angular-animate/angular-animate.min.js.map',
             'socket.io-client/socket.io.js'
           ],
           dest: 'server/public/vendor/'},

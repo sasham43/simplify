@@ -33,6 +33,7 @@ io.on('connection', function(socket){
         socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
       } else {
         console.log('trackNumber fail:', trackNumber);
+        trackNumber = 0;
         socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber}); // send feedback
       }
     }
@@ -55,6 +56,7 @@ io.on('connection', function(socket){
       case 'play':
         if(player.currentSecond != 0 && trackNumber == data.trackNumber){
           player.resume();
+          currentlyPlaying = true;
           socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
         } else {
           trackNumber = data.trackNumber;
@@ -73,6 +75,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('get status', function(data){
+    console.log('get status');
     if(currentlyPlaying){
       socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
     } else {
