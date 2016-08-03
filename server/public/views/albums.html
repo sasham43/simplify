@@ -13,7 +13,7 @@
   </div>
 
   <div class="albums">
-    <div class="album col-sm-5 col-sm-offset-1 col-md-4 center-block" ng-repeat="album in ac.albums | filter: {$: ac.filterText}">
+    <div class="album col-sm-5 col-sm-offset-1 col-md-4 center-block" ng-repeat="album in ac.albums | orderBy: 'artist_name' | filter: {$: ac.filterText}">
       <div ng-click="ac.examineAlbum(album)" class="overlay-container center-block" ng-mouseover="" ng-mouseleave="ac.hideAlbumOverlay(album)">
         <img class="cover " ng-src="{{album.image_medium}}" />
       </div>

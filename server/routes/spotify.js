@@ -30,7 +30,7 @@ router.get('/albums/stored', function(req, res){
           } else {
             var storedAlbums = [];
 
-      var queryString = 'SELECT * FROM tracks INNER JOIN albums ON tracks.album_id = albums.id';
+      var queryString = 'SELECT * FROM tracks INNER JOIN albums ON tracks.album_id = albums.id ORDER BY album_id DESC, track_number ASC;';
       var query = client.query(queryString);
 
       query.on('error', function(err){
