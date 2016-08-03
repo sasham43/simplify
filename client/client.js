@@ -1,4 +1,4 @@
-angular.module('simplifyApp', ['ngRoute']);
+angular.module('simplifyApp', ['ngRoute', 'ngAnimate']);
 
 var socket = io();
 

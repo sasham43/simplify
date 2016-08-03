@@ -264,3 +264,39 @@ a:hover{
 .fa-spin{
   animation: fa-spin 4s infinite linear;
 }
+
+.controls-small{
+  animation-duration: 0.2s;
+  animation-name: fade-in;
+}
+
+.controls-small.ng-hide{
+  animation-duration: 0.2s;
+  animation-name: fade-out;
+}
+
+.cover-img{
+  transition: all 0.2s ease-in-out;
+}
+
+/*animations*/
+
+@keyframes fade-out {
+  from{
+    opacity: 1;
+  }
+
+  to{
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from{
+    opacity: 0;
+  }
+
+  to{
+    opacity:1;
+  }
+}
