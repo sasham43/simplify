@@ -113,23 +113,32 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
   // get album
 
   socket.on('status', function(data){
-    switch (data.status){
-      case 'track playing':
-        $scope.$apply(function(){
-          ec.currentlyPlaying = true;
-        });
-        break;
-      case 'track paused':
-        $scope.$apply(function(){
-          ec.currentlyPlaying = false;
-        });
-        break;
+    if(data.examineAlbum.album_id == data.album.album_id){
+      switch (data.status){
+        case 'track playing':
+          $scope.$apply(function(){
+            ec.currentlyPlaying = true;
+          });
+          break;
+        case 'track paused':
+          $scope.$apply(function(){
+            ec.currentlyPlaying = false;
+          });
+          break;
+      }
+      $scope.$apply(function(){
+        ec.currentAlbum = data.examineAlbum;
+        ec.trackCount = data.trackNumber;
+      });
+    } else {
+      $scope.$apply(function(){
+        ec.trackCount = 0;
+        ec.currentlyPlaying = false;
+        ec.currentAlbum = data.examineAlbum;
+      });
     }
-    $scope.$apply(function(){
-      ec.trackCount = data.trackNumber;
-      ec.currentAlbum = data.album;
-    });
-    console.log('status: ', data.status, ec.currentAlbum.tracks[ec.trackCount].track_name);
+
+    console.log('status: ', data, ec.currentAlbum);
   });
 
 

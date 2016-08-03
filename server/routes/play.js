@@ -15,6 +15,7 @@ var ready = function(){
 };
 
 var album = {};
+var examineAlbum = {};
 var trackNumber = 0;
 var currentlyPlaying = false;
 
@@ -43,7 +44,8 @@ io.on('connection', function(socket){
 
   socket.on('examine album', function(data){
     console.log('examine album:', data.album.name);
-      album = data.album;
+      examineAlbum = data.album;
+      //album = data.album;
       // console.log('this is the ablum:', album);
   });
 
@@ -51,32 +53,33 @@ io.on('connection', function(socket){
 
   socket.on('command', function(data){
     console.log('command:', data);
+    album = examineAlbum;
     switch(data.cmd){
       case 'play':
         if(player.currentSecond != 0 && trackNumber == data.trackNumber){
           player.resume();
-          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
         } else {
           trackNumber = data.trackNumber;
           var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
           player.play(track);
           currentlyPlaying = true;
-          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
         }
         break;
       case 'pause':
         player.pause();
         currentlyPlaying = false;
-        socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber}); // send feedback
+        socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
         break;
     }
   });
 
   socket.on('get status', function(data){
     if(currentlyPlaying){
-      socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+      socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
     } else {
-      socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber}); // send feedback
+      socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
     }
   });
 
