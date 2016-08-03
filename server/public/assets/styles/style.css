@@ -50,7 +50,7 @@ a:hover{
   color: #333;
 }
 
-.nav a:hover{
+.btn-nav:hover{
   /*border: solid 1px #333;*/
   text-decoration: none;
   /*padding-right: 0; !important*/
