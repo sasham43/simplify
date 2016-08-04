@@ -31,10 +31,10 @@ io.on('connection', function(socket){
         console.log('trackNumber:', trackNumber);
         var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
         player.play(track);
-        socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber}); // send feedback
+        socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
       } else {
-        console.log('trackNumber fail:', trackNumber);
-        socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber}); // send feedback
+        console.log('album ended:', trackNumber);
+        socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
       }
     }
   });
@@ -43,8 +43,8 @@ io.on('connection', function(socket){
 
 
   socket.on('examine album', function(data){
-    console.log('examine album:', data.album.name);
-      examineAlbum = data.album;
+    examineAlbum = data.album;
+    console.log('examine album:', album, examineAlbum);
       //album = data.album;
       // console.log('this is the ablum:', album);
   });
@@ -52,8 +52,9 @@ io.on('connection', function(socket){
   // command
 
   socket.on('command', function(data){
-    console.log('command:', data);
     album = examineAlbum;
+
+      console.log('command:', data, album, examineAlbum);
     switch(data.cmd){
       case 'play':
         if(player.currentSecond != 0 && trackNumber == data.trackNumber){
