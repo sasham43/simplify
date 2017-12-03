@@ -18,7 +18,10 @@ router.get('/info', function(req, res){
   };
 
   request.get(options, function(err, response, body){
-    res.send(body);
+    res.send({
+      body: body,
+      token: authorize.access_token
+    });
   });
 });
 

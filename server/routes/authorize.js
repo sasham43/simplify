@@ -36,7 +36,7 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-router.get('/', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private', 'user-library-read'] }), function(req, res){
+router.get('/', passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private', 'user-library-read', 'streaming'] }), function(req, res){
   // does not get called, gets redirected
 });
 

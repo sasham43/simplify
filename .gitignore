@@ -4,3 +4,4 @@ DS_Store
 *.min.js
 cache/
 settings/
+spotify_appkey.key

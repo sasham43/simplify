@@ -41,6 +41,29 @@ angular.module('simplifyApp').controller('IndexController',['$http', '$location'
   //   console.log('test server response:', data);
   //   socket.emit('client test',{object: 'client object'});
   // });
+  window.onSpotifyPlayerAPIReady = function() {
+
+    $http.get('/spotify/info').then(function(data){
+      console.log('spotify info:', data)
+      const token = data.data.token;
+      const player = new Spotify.Player({
+        name: 'Web Playback SDK Quick Start Player',
+        getOAuthToken: function(cb){ cb(token); }
+      });
+
+      // Ready
+      player.on('ready', function(data){
+        console.log('ready with device id:', data)
+      });
+
+      player.togglePlay();
+
+      // Connect to the player!
+      player.connect();
+    });
+
+
+  }
 
   ic.checkLocation = function(){
     if($location.url() == '/'){
@@ -99,7 +122,7 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
   console.log('albums controller loaded.');
 }]);
 
-angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$scope', function(AlbumFactory, $scope){
+angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', 'UserTrackFactory', '$http', '$scope', function(AlbumFactory, UserTrackFactory, $http, $scope){
   var ec = this;
 
   ec.trackCount = 0;
@@ -272,7 +295,11 @@ angular.module('simplifyApp').factory('UserTrackFactory', ['$http', function($ht
   var user = {};
 
   var getUserInfo = function(){
+    console.log('here')
     return $http.get('/authorize/info');
+    // $http.get('/authorize/info',function(response){
+    //   console.log('user error', response)
+    // });
   }
 
   return {
