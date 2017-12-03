@@ -54,7 +54,7 @@ io.on('connection', function(socket){
   socket.on('command', function(data){
     album = examineAlbum;
 
-      console.log('command:', data, album, examineAlbum);
+    console.log('command:', data, album, examineAlbum);
     switch(data.cmd){
       case 'play':
         if(player.currentSecond != 0 && trackNumber == data.trackNumber){
@@ -84,38 +84,10 @@ io.on('connection', function(socket){
     }
   });
 
-  ////////////////////////////////////////////////////////////
-
-  // socket.on('get album', function(data){
-  //   console.log('get album');
-  //   socket.emit('examining album', {album: album});
-  // });
-  //
-  //
-  //   // play track
-  //   socket.on('play track', function(data){
-  //     console.log('play track');
-  //     album = data.album;
-  //     var trackNumber = data.trackNumber;
-  //     var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
-  //     player.play(track);
-  //     socket.emit('track playing', track);
-  //     player.on({
-  //       endOfTrack: function(){
-  //         io.emit('track finished');
-  //         console.log('track finished.');
-  //       }
-  //     });
-  //   });
-  //
-  // socket.on('stop track', function(data){
-  //   player.stop();
-  // });
-  //
-  // socket.on('pause track', function(data){
-  //   player.pause();
-  //   console.log('track paused');
-  //   socket.emit('track paused');
+  // socket.on('disconnect', function(){
+  //   //console.log('disconnected, attempting to reconnect.');
+  //   //socket.emit('disconnect');
+  //   // socket.reconnect();
   // });
 });
 

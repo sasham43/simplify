@@ -110,6 +110,11 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
     console.log('socket connected');
   });
 
+  socket.on('disconnect', function(data){
+    console.log('socket disconnected, attempting reconnect...');
+    socket.reconnect();
+  });
+
   // get album
 
   socket.on('status', function(data){
