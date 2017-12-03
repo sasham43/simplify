@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
-    "angular": "^1.5.5",
-    "angular-route": "^1.5.5",
+    "angular": "1.5.8",
+    "angular-route": "1.5.8",
     "async": "^2.0.0",
     "body-parser": "^1.15.0",
     "bootstrap": "^3.3.6",
@@ -15,7 +15,6 @@
     "grunt": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^1.0.1",
-    "node-spotify": "^0.8.1",
     "nodemon": "^1.9.1",
     "passport": "^0.3.2",
     "passport-spotify": "^0.3.1",

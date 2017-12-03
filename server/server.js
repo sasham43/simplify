@@ -16,9 +16,9 @@ var port = process.env.PORT || 3000;
 ////////////import modules//////////
 var connection = require('./db/connection.js');
 var index = require('./routes/index');
-// var play = require('./routes/play');
-// var authorize = require('./routes/authorize').router;
-// var spotify = require('./routes/spotify');
+var play = require('./routes/play');
+var authorize = require('./routes/authorize').router;
+var spotify = require('./routes/spotify');
 
 
 //////////// config /////////////
@@ -39,9 +39,9 @@ app.use(passport.session());
 
 
 ///////////routes/////////////
-// app.use('/authorize', authorize);
-// app.use('/spotify', spotify);
-// app.use('/play', play);
+app.use('/authorize', authorize);
+app.use('/spotify', spotify);
+app.use('/play', play);
 
 
 

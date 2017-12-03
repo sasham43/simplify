@@ -34,6 +34,7 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
 
 angular.module('simplifyApp').controller('IndexController',['$http', '$location', function($http, $location){
   var ic = this;
+  var that;
 
   // var socket = io();
   // socket.on('test', function(data){
@@ -112,12 +113,13 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', '$
 
   socket.on('disconnect', function(data){
     console.log('socket disconnected, attempting reconnect...');
-    socket.reconnect();
+    socket.connect();
   });
 
   // get album
 
   socket.on('status', function(data){
+    // console.log('status:', data)
     if(data.examineAlbum.album_id == data.album.album_id){
       switch (data.status){
         case 'track playing':
@@ -222,7 +224,7 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
   var examineAlbum = function(album){
     $location.url('/album');
     // socket.emit('', {album: album});
-    //currentAlbum.album = album;
+    // currentAlbum.album = album;
     console.log('examining album:', album);
     // $http.post('/spotify/album-features', album.tracks).then(function(response){
     //   console.log('album features response:', response.data);
