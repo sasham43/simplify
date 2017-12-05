@@ -55,11 +55,19 @@ io.on('connection', function(socket){
 
     if(data.cmd == 'play'){
       options.url = 'https://api.spotify.com/v1/me/player/play';
+      options.method = 'put';
     } else if (data.cmd == 'pause'){
       options.url = 'https://api.spotify.com/v1/me/player/pause';
+      options.method = 'put';
+    } else if (data.cmd == 'next') {
+      options.url = 'https://api.spotify.com/v1/me/player/next';
+      options.method = 'post';
+    } else if (data.cmd == 'prev'){
+      options.url = 'https://api.spotify.com/v1/me/player/previous';
+      options.method = 'post';
     }
 
-    request.put(options, function(err, response, body){
+    request(options, function(err, response, body){
       if(err)
         console.log('err', err)
 
@@ -71,11 +79,6 @@ io.on('connection', function(socket){
 
   socket.on('get status', function(data){
     getStatus();
-    // if(currentlyPlaying){
-    //   socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    // } else {
-    //   socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    // }
   });
 
   function getStatus(){

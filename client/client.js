@@ -195,12 +195,14 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', 'U
 
   ec.prevTrack = function(){
     ec.trackCount--;
-    ec.playTrack(ec.trackCount);
+    // ec.playTrack(ec.trackCount);
+    socket.emit('command', {cmd: 'prev'});
   };
 
   ec.nextTrack = function(){
     ec.trackCount++;
-    ec.playTrack(ec.trackCount);
+    // ec.playTrack(ec.trackCount);
+    socket.emit('command', {cmd: 'next'});
   };
 
   ec.trackMarker = function(index){
