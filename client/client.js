@@ -47,7 +47,7 @@ angular.module('simplifyApp').controller('IndexController',['$http', '$location'
       console.log('spotify info:', data)
       const token = data.data.token;
       const player = new Spotify.Player({
-        name: 'Web Playback SDK Quick Start Player',
+        name: 'simplify',
         getOAuthToken: function(cb){ cb(token); }
       });
 
@@ -246,37 +246,8 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
 
   var examineAlbum = function(album){
     $location.url('/album');
-    // socket.emit('', {album: album});
-    // currentAlbum.album = album;
     console.log('examining album:', album);
-    // $http.post('/spotify/album-features', album.tracks).then(function(response){
-    //   console.log('album features response:', response.data);
-    //   currentAlbum.album = album;
-    //   //console.log('currentAlbum:', currentAlbum);
-    //   currentAlbum.album.tracks = response.data;
-    //   //console.log('currentAlbum2:', currentAlbum);
-    // });
   };
-
-  // var playAlbum = function(album){
-  //   // $http.get('/play/album' + album.link).then(function(response){
-  //   //   console.log('playing album.');
-  //   // });
-  //   var track = 0;
-  //   var playTrack = function(){
-  //     $http.post('/play/track/',  album.tracks[track]).then(function(response){
-  //       console.log('track ended?', response.data);
-  //       if(response.data.message === 'track playing'){
-  //         console.log('playing:', album.tracks[track].track_name);
-  //       } else if (response.data.message === 'track finished'){
-  //         console.log('track ended.');
-  //         playTrack();
-  //       }
-  //
-  //     });
-  //   };
-  //   playTrack();
-  // };
 
 
 
@@ -286,8 +257,6 @@ angular.module('simplifyApp').factory('AlbumFactory', ['$http', '$location', fun
     updateAlbums: updateAlbums,
     albums: albums,
     getAlbums: getAlbums
-    // playAlbum: playAlbum,
-    // playTrack: playTrack
   }
 }]);
 
@@ -297,9 +266,6 @@ angular.module('simplifyApp').factory('UserTrackFactory', ['$http', function($ht
   var getUserInfo = function(){
     console.log('here')
     return $http.get('/authorize/info');
-    // $http.get('/authorize/info',function(response){
-    //   console.log('user error', response)
-    // });
   }
 
   return {

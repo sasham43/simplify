@@ -1,14 +1,9 @@
 var router = require('express').Router();
-// var spotify = require('node-spotify')({appkeyFile: './spotify_appkey.key'});
 var spotifyUser = process.env.SPOTIFY_USER;
 var spotifyPass = process.env.SPOTIFY_PASS;
 var io = require('../server.js').io;
-
-// spotify.on({
-//   ready: ready
-// });
-
-// spotify.login(spotifyUser, spotifyPass, false, false);
+var request = require('request');
+var authorize = require('./authorize');
 
 var ready = function(){
   console.log('spotify play loaded.');
@@ -18,9 +13,6 @@ var album = {};
 var examineAlbum = {};
 var trackNumber = 0;
 var currentlyPlaying = false;
-
-// var player = spotify.player;
-
 
 io.on('connection', function(socket){
   // player.on({
@@ -44,7 +36,8 @@ io.on('connection', function(socket){
 
   socket.on('examine album', function(data){
     examineAlbum = data.album;
-    console.log('examine album:', album, examineAlbum);
+    // console.log('examine album:', album, examineAlbum);
+    console.log('examine album');
       //album = data.album;
       // console.log('this is the ablum:', album);
   });
@@ -54,26 +47,45 @@ io.on('connection', function(socket){
   socket.on('command', function(data){
     album = examineAlbum;
 
-    console.log('command:', data, album, examineAlbum);
-    switch(data.cmd){
-      case 'play':
-        if(player.currentSecond != 0 && trackNumber == data.trackNumber){
-          player.resume();
-          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-        } else {
-          trackNumber = data.trackNumber;
-          // var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
-          // player.play(track);
-          currentlyPlaying = true;
-          socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-        }
-        break;
-      case 'pause':
-        player.pause();
-        currentlyPlaying = false;
-        socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-        break;
+    console.log('command:', data);
+    var options = {
+      headers: {'Authorization': 'Bearer ' + authorize.access_token},
+      json: true
+    };
+
+    if(data.cmd == 'play'){
+      options.url = 'https://api.spotify.com/v1/me/player/play';
+    } else if (data.cmd == 'pause'){
+      options.url = 'https://api.spotify.com/v1/me/player/pause';
     }
+
+    request.put(options, function(err, response, body){
+      if(err)
+        console.log('err', err)
+
+      console.log('body:', body);
+      socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+    });
+
+    // switch(data.cmd){
+    //   case 'play':
+    //     if(player.currentSecond != 0 && trackNumber == data.trackNumber){
+    //       player.resume();
+    //       socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+    //     } else {
+    //       trackNumber = data.trackNumber;
+    //       // var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
+    //       // player.play(track);
+    //       currentlyPlaying = true;
+    //       socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+    //     }
+    //     break;
+    //   case 'pause':
+    //     player.pause();
+    //     currentlyPlaying = false;
+    //     socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+    //     break;
+    // }
   });
 
   socket.on('get status', function(data){
