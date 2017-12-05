@@ -191,6 +191,84 @@ router.get('/albums/update', function(req, res){
   request.get(options, getAlbums);
 });
 
+// ascii
+var Jimp = require("jimp");
+const download = require('image-downloader')
+const imageToAscii = require("image-to-ascii");
+
+router.get('/ascii', function(req, res, next){
+
+  getStatus(function(body){
+    var image = body.item ? body.item.album.images[0].url : '';
+    console.log(body);
+    // var image = process.argv[2] || 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/NirvanaNevermindalbumcover.jpg/220px-NirvanaNevermindalbumcover.jpg';
+    // Download to a directory and save with the original filename
+    const options = {
+      url: image,
+      dest: './cover.jpg'                  // Save to /path/to/dest/image.jpg
+    };
+
+    const ascii_options = {
+        colored: false,
+        size_options: {
+            screen_size: {
+                width: 24,
+                height: 12
+            },
+            // preserve_aspect_ratio: false,
+            fit_screen: false
+        },
+        // pixels: ' @PL.,_-/"'
+        // pixels: "@80GCL1;:,. "
+        pixels: " .,:;1GCL08@"
+    };
+    console.log('going')
+    download.image(options)
+      .then(({ filename, image }) => {
+        console.log('File saved to', filename);
+        // open a file called "lenna.png"
+        Jimp.read(filename, function (err, pic) {
+            if (err) throw err;
+            console.log('size:', pic.bitmap.width, pic.bitmap.height)
+            pic.resize(pic.bitmap.width * 2, pic.bitmap.height)            // resize
+                 .quality(100)                 // set JPEG quality
+                 .greyscale()                 // set greyscale
+                 .write("out.jpg", function(err, done){
+                     imageToAscii("out.jpg", ascii_options, (err, converted) => {
+                         console.log(err || converted);
+                         res.send(converted)
+                     });
+                 }); // save
+        });
+      }).catch((err) => {
+        throw err
+      })
+  })
+
+  function getStatus(cb){
+    var options = {
+      url: 'https://api.spotify.com/v1/me/player/',
+      headers: {'Authorization': 'Bearer ' + authorize.access_token},
+      json: true
+    };
+
+    request.get(options, function(err, response, body){
+      if(err)
+        console.log('err', err);
+
+      var playing = '';
+      if(body.is_playing){
+        playing = 'track playing';
+      } else {
+        playing = 'track paused';
+      }
+
+      cb(body)
+      // socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum, track: body.item});
+    });
+  }
+});
+
 
 
 module.exports = router;

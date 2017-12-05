@@ -65,7 +65,7 @@
 
     <div id="tracks" class="tracks col-md-4" ng-show="!ec.coverView">
       <div ng-click="ec.playTrack($index)" class="track" ng-repeat="track in ec.currentAlbum.tracks">
-        {{$index+1}} {{track.track_name}} <span ng-show="($index == ec.trackCount)" class="track-marker" aria-hidden="true"><</span>
+        {{$index+1}} {{track.track_name}} <span ng-show="(($index+1) == ec.trackCount)" class="track-marker" aria-hidden="true"><</span>
       </div>
     </div>
 

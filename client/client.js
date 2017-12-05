@@ -157,8 +157,10 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', 'U
           break;
       }
       $scope.$apply(function(){
+        // ec.currentAlbum = data.examineAlbum;
+        // ec.trackCount = data.trackNumber;
         ec.currentAlbum = data.examineAlbum;
-        ec.trackCount = data.trackNumber;
+        ec.trackCount = data.track.track_number;
       });
     } else {
       $scope.$apply(function(){

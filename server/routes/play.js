@@ -72,7 +72,7 @@ io.on('connection', function(socket){
         console.log('err', err)
 
       console.log('body:', body);
-      socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+      // socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
       getStatus();
     });
   });
@@ -99,7 +99,7 @@ io.on('connection', function(socket){
         playing = 'track paused';
       }
 
-      socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum});
+      socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum, track: body.item});
     });
   }
 
