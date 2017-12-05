@@ -65,36 +65,40 @@ io.on('connection', function(socket){
 
       console.log('body:', body);
       socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+      getStatus();
     });
-
-    // switch(data.cmd){
-    //   case 'play':
-    //     if(player.currentSecond != 0 && trackNumber == data.trackNumber){
-    //       player.resume();
-    //       socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    //     } else {
-    //       trackNumber = data.trackNumber;
-    //       // var track = spotify.createFromLink(album.tracks[trackNumber].track_link);
-    //       // player.play(track);
-    //       currentlyPlaying = true;
-    //       socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    //     }
-    //     break;
-    //   case 'pause':
-    //     player.pause();
-    //     currentlyPlaying = false;
-    //     socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    //     break;
-    // }
   });
 
   socket.on('get status', function(data){
-    if(currentlyPlaying){
-      socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    } else {
-      socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
-    }
+    getStatus();
+    // if(currentlyPlaying){
+    //   socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+    // } else {
+    //   socket.emit('status', {status: 'track paused', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+    // }
   });
+
+  function getStatus(){
+    var options = {
+      url: 'https://api.spotify.com/v1/me/player/',
+      headers: {'Authorization': 'Bearer ' + authorize.access_token},
+      json: true
+    };
+
+    request.get(options, function(err, response, body){
+      if(err)
+        console.log('err', err);
+
+      var playing = '';
+      if(body.is_playing){
+        playing = 'track playing';
+      } else {
+        playing = 'track paused';
+      }
+
+      socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum});
+    });
+  }
 
   // socket.on('disconnect', function(){
   //   //console.log('disconnected, attempting to reconnect.');
