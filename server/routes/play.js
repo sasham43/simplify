@@ -58,7 +58,7 @@ io.on('connection', function(socket){
       options.url = 'https://api.spotify.com/v1/me/player/play';
       options.method = 'put';
       console.log('ids:', data.album.album_id, album.album_id)
-      if(data.album.album_id != album.album_id){
+      if((data.album.album_id != album.album_id) || trackNumber != data.trackNumber){
           console.log('new',data.album.tracks[data.trackNumber])
           options.json = {
               uris: [
@@ -81,7 +81,7 @@ io.on('connection', function(socket){
       if(err)
         console.log('err', err)
 
-      console.log('body:', body);
+      console.log('cmd body:', body);
       album = examineAlbum; // we made a command based on this album so it is playing now
       getStatus();
     });
