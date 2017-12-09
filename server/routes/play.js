@@ -40,12 +40,13 @@ io.on('connection', function(socket){
     console.log('examine album');
       //album = data.album;
       // console.log('this is the ablum:', album);
+      getStatus();
   });
 
   // command
 
   socket.on('command', function(data){
-    album = examineAlbum;
+    // album = examineAlbum;
 
     console.log('command:', data);
     var options = {
@@ -56,6 +57,15 @@ io.on('connection', function(socket){
     if(data.cmd == 'play'){
       options.url = 'https://api.spotify.com/v1/me/player/play';
       options.method = 'put';
+      console.log('ids:', data.album.album_id, album.album_id)
+      if(data.album.album_id != album.album_id){
+          console.log('new',data.album.tracks[data.trackNumber])
+          options.json = {
+              uris: [
+                  data.album.tracks[data.trackNumber].track_link
+              ]
+          }
+      }
     } else if (data.cmd == 'pause'){
       options.url = 'https://api.spotify.com/v1/me/player/pause';
       options.method = 'put';
@@ -72,7 +82,7 @@ io.on('connection', function(socket){
         console.log('err', err)
 
       console.log('body:', body);
-      // socket.emit('status', {status: 'track playing', album: album, trackNumber: trackNumber, examineAlbum: examineAlbum}); // send feedback
+      album = examineAlbum; // we made a command based on this album so it is playing now
       getStatus();
     });
   });
@@ -93,11 +103,13 @@ io.on('connection', function(socket){
         console.log('err', err);
 
       var playing = '';
-      if(body.is_playing){
+      console.log('status body:', body)
+      if(body.is_playing && album.id == examineAlbum.id){
         playing = 'track playing';
       } else {
         playing = 'track paused';
       }
+      trackNumber = body.item.track_number;
 
       socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum, track: body.item});
     });
