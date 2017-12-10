@@ -32,9 +32,17 @@ angular.module('simplifyApp').config(['$routeProvider', '$locationProvider', fun
     $locationProvider.html5Mode(true);
 }]);
 
-angular.module('simplifyApp').controller('IndexController',['$http', '$location', function($http, $location){
+angular.module('simplifyApp').service('DeviceService', function(){
+    return {
+        device_id: null
+    }
+});
+
+angular.module('simplifyApp').controller('IndexController',['$http', '$location', '$rootScope', 'DeviceService', function($http, $location, $rootScope, DeviceService){
   var ic = this;
   var that;
+
+  ic.load_spotify = true;
 
   // var socket = io();
   // socket.on('test', function(data){
@@ -51,15 +59,36 @@ angular.module('simplifyApp').controller('IndexController',['$http', '$location'
         getOAuthToken: function(cb){ cb(token); }
       });
 
+      // errors
+      player.on('initialization_error', function (e) {
+          console.error("Failed to initialize", e.message);
+        });
+        player.on('authentication_error', function (e) {
+          console.error("Failed to authenticate", e.message);
+        });
+        player.on('account_error', function (e) {
+          console.error("Failed to validate Spotify account", e.message);
+        });
+        player.on('playback_error', function (e) {
+          console.error("Failed to perform playback", e.message);
+        });
+
       // Ready
       player.on('ready', function(data){
-        console.log('ready with device id:', data)
+        console.log('ready with device id:', data);
+        DeviceService.device_id = data.device_id;
+
+          socket.emit('device', data);
       });
 
       player.togglePlay();
 
       // Connect to the player!
-      player.connect();
+      player.connect().then(function(success){
+          console.log('success:', success);
+      }).catch(function(err){
+          console.log('no success:', err);
+      });
     });
 
 
@@ -122,7 +151,7 @@ angular.module('simplifyApp').controller('AlbumsController',['UserTrackFactory',
   console.log('albums controller loaded.');
 }]);
 
-angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', 'UserTrackFactory', '$http', '$scope', function(AlbumFactory, UserTrackFactory, $http, $scope){
+angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', 'UserTrackFactory', 'DeviceService', '$http', '$scope', function(AlbumFactory, UserTrackFactory, DeviceService, $http, $scope){
   var ec = this;
 
   ec.trackCount = 0;
@@ -179,7 +208,8 @@ angular.module('simplifyApp').controller('ExamineController',['AlbumFactory', 'U
   // commands
 
   ec.playTrack = function(trackNumber){
-    socket.emit('command', {cmd: 'play', album: ec.currentAlbum, trackNumber: trackNumber});
+      console.log('device:', DeviceService)
+    socket.emit('command', {cmd: 'play', album: ec.currentAlbum, trackNumber: trackNumber, device: DeviceService.device_id});
     //ec.trackCount = trackNumber;
   };
 

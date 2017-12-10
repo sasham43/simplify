@@ -13,6 +13,7 @@ var album = {};
 var examineAlbum = {};
 var trackNumber = 0;
 var currentlyPlaying = false;
+var device_id;
 
 io.on('connection', function(socket){
   // player.on({
@@ -33,6 +34,28 @@ io.on('connection', function(socket){
   console.log('socket connected');
   socket.emit('socket connected');
 
+  socket.on('device', function(data){
+      console.log('device:', data);
+
+      var options = {
+          uri: 'https://api.spotify.com/v1/me/player',
+          method: 'put',
+          headers: {'Authorization': 'Bearer ' + authorize.access_token},
+          json: {
+              device_ids: [
+                  data.device_id
+              ],
+              play: true
+          }
+      }
+
+      request(options, function(err, response, body){
+          if(err)
+            console.log('err', err);
+
+          console.log('body', body)
+      });
+  })
 
   socket.on('examine album', function(data){
     examineAlbum = data.album;
@@ -59,11 +82,13 @@ io.on('connection', function(socket){
       options.method = 'put';
       console.log('ids:', data.album.album_id, album.album_id)
       if((data.album.album_id != album.album_id) || trackNumber != data.trackNumber){
-          console.log('new',data.album.tracks[data.trackNumber])
-          options.json = {
-              uris: [
-                  data.album.tracks[data.trackNumber].track_link
-              ]
+          console.log('new')
+          if(data.album.tracks.length && data.album.tracks[data.trackNumber]){
+              options.json = {
+                  uris: [
+                      data.album.tracks[data.trackNumber].track_link
+                  ]
+              }
           }
       }
     } else if (data.cmd == 'pause'){
@@ -103,15 +128,19 @@ io.on('connection', function(socket){
         console.log('err', err);
 
       var playing = '';
+      var track = {};
       console.log('status body:', body)
-      if(body.is_playing && album.id == examineAlbum.id){
+      if(body && body.is_playing && album.id == examineAlbum.id){
         playing = 'track playing';
       } else {
         playing = 'track paused';
       }
-      trackNumber = body.item.track_number;
+      if(body && body.item){
+          track = body.item;
+          trackNumber = body.item.track_number;
+      }
 
-      socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum, track: body.item});
+      socket.emit('status', {status: playing, album: album, trackNumber: trackNumber, examineAlbum: examineAlbum, track: track});
     });
   }
 
