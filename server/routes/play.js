@@ -34,28 +34,28 @@ io.on('connection', function(socket){
   console.log('socket connected');
   socket.emit('socket connected');
 
-  socket.on('device', function(data){
-      console.log('device:', data);
-
-      var options = {
-          uri: 'https://api.spotify.com/v1/me/player',
-          method: 'put',
-          headers: {'Authorization': 'Bearer ' + authorize.access_token},
-          json: {
-              device_ids: [
-                  data.device_id
-              ],
-              play: true
-          }
-      }
-
-      request(options, function(err, response, body){
-          if(err)
-            console.log('err', err);
-
-          console.log('body', body)
-      });
-  })
+  // socket.on('device', function(data){
+  //     console.log('device:', data);
+  //
+  //     var options = {
+  //         uri: 'https://api.spotify.com/v1/me/player',
+  //         method: 'put',
+  //         headers: {'Authorization': 'Bearer ' + authorize.access_token},
+  //         json: {
+  //             device_ids: [
+  //                 data.device_id
+  //             ],
+  //             play: false
+  //         }
+  //     }
+  //
+  //     request(options, function(err, response, body){
+  //         if(err)
+  //           console.log('err', err);
+  //
+  //         console.log('device body', body)
+  //     });
+  // })
 
   socket.on('examine album', function(data){
     examineAlbum = data.album;
@@ -72,44 +72,7 @@ io.on('connection', function(socket){
     // album = examineAlbum;
 
     console.log('command:', data);
-    var options = {
-      headers: {'Authorization': 'Bearer ' + authorize.access_token},
-      json: true
-    };
-
-    if(data.cmd == 'play'){
-      options.url = 'https://api.spotify.com/v1/me/player/play';
-      options.method = 'put';
-      console.log('ids:', data.album.album_id, album.album_id)
-      if((data.album.album_id != album.album_id) || trackNumber != data.trackNumber){
-          console.log('new')
-          if(data.album.tracks.length && data.album.tracks[data.trackNumber]){
-              options.json = {
-                  uris: [
-                      data.album.tracks[data.trackNumber].track_link
-                  ]
-              }
-          }
-      }
-    } else if (data.cmd == 'pause'){
-      options.url = 'https://api.spotify.com/v1/me/player/pause';
-      options.method = 'put';
-    } else if (data.cmd == 'next') {
-      options.url = 'https://api.spotify.com/v1/me/player/next';
-      options.method = 'post';
-    } else if (data.cmd == 'prev'){
-      options.url = 'https://api.spotify.com/v1/me/player/previous';
-      options.method = 'post';
-    }
-
-    request(options, function(err, response, body){
-      if(err)
-        console.log('err', err)
-
-      console.log('cmd body:', body);
-      album = examineAlbum; // we made a command based on this album so it is playing now
-      getStatus();
-    });
+    sendCommand(data, 0);
   });
 
   socket.on('get status', function(data){
@@ -129,7 +92,9 @@ io.on('connection', function(socket){
 
       var playing = '';
       var track = {};
-      console.log('status body:', body)
+      if(body){
+          console.log('status body:', body.is_playing, body.item.album.name, body.item.track_number)
+      }
       if(body && body.is_playing && album.id == examineAlbum.id){
         playing = 'track playing';
       } else {
@@ -144,11 +109,59 @@ io.on('connection', function(socket){
     });
   }
 
-  // socket.on('disconnect', function(){
-  //   //console.log('disconnected, attempting to reconnect.');
-  //   //socket.emit('disconnect');
-  //   // socket.reconnect();
-  // });
+  function sendCommand(data, i){
+      var options = {
+        headers: {'Authorization': 'Bearer ' + authorize.access_token},
+        json: true
+      };
+
+      if(data.cmd == 'play'){
+        options.url = 'https://api.spotify.com/v1/me/player/play';
+        options.method = 'put';
+        console.log('ids:', data.album.album_id, album.album_id)
+        if((data.album.album_id != album.album_id) || trackNumber != data.trackNumber){
+            // console.log('new')
+            if(data.album.tracks.length && data.album.tracks[data.trackNumber]){
+                options.json = {
+                    uris: [
+                        data.album.tracks[data.trackNumber].track_link
+                    ]
+                }
+                console.log('track:', data.album.tracks[data.trackNumber].track_link)
+            }
+        }
+      } else if (data.cmd == 'pause'){
+        options.url = 'https://api.spotify.com/v1/me/player/pause';
+        options.method = 'put';
+      } else if (data.cmd == 'next') {
+        options.url = 'https://api.spotify.com/v1/me/player/next';
+        options.method = 'post';
+      } else if (data.cmd == 'prev'){
+        options.url = 'https://api.spotify.com/v1/me/player/previous';
+        options.method = 'post';
+      }
+
+      request(options, function(err, response, body){
+        if(err)
+          console.log('err', err)
+
+        console.log('cmd body:', response.statusCode);
+        if(response.statusCode == 202 && i < 5){
+            setTimeout(function(){
+                i++
+                console.log('retrying', i);
+                sendCommand(data, i);
+            }, 5000);
+            // sendCommand(data, i++);
+        } else {
+            album = examineAlbum; // we made a command based on this album so it is playing now
+
+            setTimeout(getStatus, 1000);
+        }
+
+        // getStatus();
+      });
+  }
 });
 
 
