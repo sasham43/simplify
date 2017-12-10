@@ -34,6 +34,7 @@ io.on('connection', function(socket){
   console.log('socket connected');
   socket.emit('socket connected');
 
+
   // socket.on('device', function(data){
   //     console.log('device:', data);
   //
@@ -76,6 +77,9 @@ io.on('connection', function(socket){
   });
 
   socket.on('get status', function(data){
+
+
+      getDevices();
     getStatus();
   });
 
@@ -160,6 +164,55 @@ io.on('connection', function(socket){
         }
 
         // getStatus();
+      });
+  }
+
+  function getDevices(){
+      var options = {
+          uri: 'https://api.spotify.com/v1/me/player/devices',
+          headers: {'Authorization': 'Bearer ' + authorize.access_token},
+          method: 'get',
+          json: true
+      };
+
+      request(options, function(err, response, body){
+          if(err)
+            console.log('err', err);
+
+        console.log('get device body', body, body.devices);
+        if(body.devices && body.devices.length > 0){
+            var simplify_device = body.devices.find(function(d){
+                return d.name == 'simplify';
+            });
+            if(simplify_device){
+                console.log('spotify device', simplify_device)
+                setDevice(simplify_device.id)
+            } else {
+                console.log('no device')
+            }
+        }
+      });
+  }
+
+  function setDevice(device_id){
+      var options = {
+          uri: 'https://api.spotify.com/v1/me/player',
+          method: 'put',
+          headers: {'Authorization': 'Bearer ' + authorize.access_token},
+          json: true,
+          body: {
+              device_ids: [
+                  device_id
+              ],
+              play: true
+          }
+      }
+
+      request(options, function(err, response, body){
+          if(err)
+            console.log('set device err', err);
+
+          console.log('device body', body)
       });
   }
 });
